@@ -1,0 +1,7 @@
+# See /.well-known/security.txt — this duplicate exists so the
+# legacy RFC 5785 path works too.
+Contact: mailto:security@privacykey.org
+Expires: 2027-04-30T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://privacycommand.privacykey.org/.well-known/security.txt
+Policy: https://github.com/privacykey/privacycommand/blob/main/SECURITY.md

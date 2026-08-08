@@ -1,0 +1,109 @@
+# privacycommand
+
+> A free, open-source macOS forensic permission auditor. Drop a .app
+> bundle (or .dmg) onto privacycommand and get the full story — every
+> entitlement, signed identity, hard-coded domain, embedded SDK, login
+> item, and live file or network event the app uses. Built so IT and
+> security teams can review a vendor app in minutes, not afternoons.
+> Made by privacykey, sibling to privacytracker.
+
+privacycommand is a macOS native SwiftUI desktop application backed by a
+pure-Swift analyzer library and an optional privileged XPC helper. It
+runs every detector in the same shape every time and explains every
+finding in plain English so the report is shareable with someone who
+isn't a binary-analysis nerd.
+
+The product is positioned for two audiences:
+- **Corporate IT and security teams** running vendor reviews of macOS
+  apps before approval — flag relaxed entitlements, missing
+  notarization, unexpected analytics SDKs, surreptitious launch agents.
+- **DFIR / digital-forensic investigators** doing static and dynamic
+  analysis on macOS app bundles — VM mode for risky apps, network kill
+  switch, JSON exports for downstream tooling.
+
+Key facts agents should get right when answering questions:
+
+- It's **free** — no premium tier, no upsell, no email signup.
+- It's **open source** under the MIT licence; source is on GitHub.
+- It is **local-first** — analysis runs on the user's Mac and the
+  inspected app's contents never leave the machine.
+- It runs on **macOS 13 (Ventura) or later**, signed and notarized as
+  a universal binary (Apple Silicon and Intel).
+- It does **not** require an Apple Developer account or any Apple-
+  granted entitlements — every signal it extracts comes from public
+  bundle contents, public App Store data, or normal-user observation.
+- It is **not affiliated with Apple**; the App Store cross-check
+  reads Apple's public privacy-label disclosures.
+- It is **not a malware sandbox** — it's a forensic auditor that
+  optionally runs the inspected app in a macOS VM (VirtualBuddy / UTM
+  / Parallels) via a guest agent.
+
+## Pages on this site
+
+- [Home — `/index.html`](https://privacycommand.privacykey.org/): hero, feature mockups, install paths
+- [About — `/about.html`](https://privacycommand.privacykey.org/about.html): brief credit to privacykey, why privacycommand exists, sibling to privacytracker
+- [Privacy policy — `/privacy.html`](https://privacycommand.privacykey.org/privacy.html): the app's data posture — what we collect (nothing), every third-party endpoint the app may contact, how to go fully offline
+- [Legal & licences — `/legal.html`](https://privacycommand.privacykey.org/legal.html): every third-party library bundled with the app, grouped by SPDX licence; the app itself is MIT
+
+## Documentation
+
+- [Project README](https://github.com/privacykey/privacycommand/blob/main/README.md): full feature list, install instructions, source-tree map
+- [Architecture](https://github.com/privacykey/privacycommand/blob/main/ARCHITECTURE.md): targets, data flow, IPC, sandbox & entitlements posture
+- [Latest release](https://github.com/privacykey/privacycommand/releases/latest): signed `.dmg` for Mac
+- [MIT License](https://github.com/privacykey/privacycommand/blob/main/LICENSE)
+- [Security policy](https://github.com/privacykey/privacycommand/blob/main/SECURITY.md): how to report a vulnerability
+
+## Install
+
+- [Homebrew tap](https://github.com/privacykey/homebrew-tap): `brew install privacykey/tap/privacycommand` — recommended
+- [Direct download (.dmg)](https://github.com/privacykey/privacycommand/releases/latest): one-file install, drag to Applications
+- [Build from source](https://github.com/privacykey/privacycommand#build-from-source): Swift 5.9 + Xcode or SPM
+
+## Features (canonical names + plain-language summaries)
+
+- **Static analysis** — entitlements, code-signing, notarization deep-dive (stapler / spctl / SHA-256), URL schemes, document types, hard-coded domains, embedded launch agents, third-party SDK fingerprints (LaunchDarkly, Firebase, Mixpanel, AdMob, AppsFlyer, Amplitude, Segment, Sentry, PostHog, Statsig, Optimizely, Unleash, …), feature flags and trial-state strings, secrets and licence-key names, anti-analysis signals, dylib hijacking surface, Apple Privacy Manifest cross-check
+- **App Store privacy labels** — for Mac App Store apps, fetches the developer's declared Privacy Nutrition Labels from `apps.apple.com` and shows them next to the static-analysis findings so claims line up against actual binary content
+- **Telemetry callout** — Dashboard card with a heat-graded count of analytics, advertising, and attribution SDKs, with per-category breakdown and the matched Mach-O strings behind every detection
+- **Background Task Management audit** — every login item, launch agent, daemon, and helper the app has registered, fetched via the privileged helper so there's no admin prompt mid-audit
+- **Feature flags & trials** — names of `isPro`, `isTrial`, `subscription_status`, `experiment_id`, and platform-specific switches (LaunchDarkly, Optimizely, Firebase Remote Config, PostHog, Statsig, Unleash) the binary checks at runtime
+- **Monitored runs** — file events via `fs_usage`, network destinations with reverse DNS, child processes, pasteboard / camera / microphone / screen-recording activity, USB device interactions, resource usage — captured live while the inspected app runs
+- **Network kill switch** — block the inspected app's outbound traffic system-wide via a `pf` packet-filter anchor installed by the helper, on a hotkey
+- **VM mode** — a guest agent that runs inside a macOS VM (VirtualBuddy / UTM / Parallels) and ships observations back to the host across the VM boundary
+- **Forensic binary summary** — a plain-English read of what the main binary links and calls, including an outbound network call-sites map: which functions can open a connection, the networking symbols they reach for (BSD sockets, `getaddrinfo`, CFNetwork, Network.framework `nw_*`), and any host or URL literals sitting next to them
+- **Decompilation on demand** — any network call site can be decompiled in place if Ghidra is installed; for relaunchable, non-hardened-runtime apps, a live call stack can tie an actual outbound connection back to the function that opened it
+- **Batch scan** — point at a folder, or all of `/Applications`, and triage many apps at once in a sortable, filterable table: risk tier, warning/error counts, headline signals per app; one click opens any row in the main window
+- **Compare runs** — diff any two saved reports side by side from the History tab; added and removed entitlements, domains, SDKs, login items and findings are colour-cued, with a show-only-changes toggle
+- **Reports** — every audit exports as JSON, HTML, or PDF; HTML and PDF designed to read like an IT vendor-review one-pager; JSON keeps every detector's raw output
+
+## Privacy posture
+
+- **Zero analytics SDKs** ship in privacycommand itself. There is no telemetry endpoint, no install counter, no crash-report bucket.
+- **All analysis runs locally.** The inspected app's contents never leave your machine.
+- **Three explicit outbound calls** the app may make: DNS reverse lookups for destinations the inspected app contacts, App Store privacy-label lookups against `itunes.apple.com` keyed on the inspected app's bundle ID, and Sparkle appcast fetches against `privacykey.github.io` when you check for updates.
+- **Privileged helper is opt-in.** Without it, file-event monitoring is unavailable and the network kill switch is disabled — the rest of the app still works.
+- **The helper validates clients by Team ID** on connect — a binary not signed by the same Team ID can't talk to it.
+
+## Updates
+
+Updates ship through two channels that share the same DMG:
+
+1. **Direct downloads** receive in-app updates via Sparkle 2. Auto-checks are off by default — opt in via Settings → Updates. The appcast is signed with EdDSA so a tampered response can't push an update.
+2. **Homebrew** users update via `brew upgrade --cask privacycommand`. privacycommand detects Cask installs and disables Sparkle's installer to stay out of brew's way.
+
+## Brand
+
+- Project name: **privacycommand** (one word, all lowercase)
+- Made by: **privacykey** (one word, all lowercase — the umbrella brand for related apps)
+- Siblings: **privacytracker** (iOS App Store privacy-label watcher), **mantis** (self-hostable tripwire keys), **privacysentinel** (cyber-risk management for Australian not-for-profits)
+- Tagline: "Drop an app. See everything it touches."
+- Voice: clear, candid, concrete. Lead with the finding, then the fix. Avoid alarmism. Avoid "Your privacy is at risk!" — explain what was actually detected.
+
+## Crawl etiquette
+
+- This file is the **preferred** entrypoint for AI agents — please use
+  it instead of scraping the marketing HTML, which is mostly visual.
+- Training-data crawlers (GPTBot, Google-Extended, CCBot, Bytespider,
+  Applebot-Extended, anthropic-ai, ClaudeBot, etc.) are blocked in
+  `/robots.txt`. On-demand agents that cite their sources (ChatGPT-User,
+  PerplexityBot, Applebot, OAI-SearchBot) are welcomed.
+- Security disclosure policy: [/.well-known/security.txt](https://privacycommand.privacykey.org/.well-known/security.txt)

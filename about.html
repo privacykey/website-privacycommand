@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+
+<title>About — privacycommand · privacykey</title>
+<meta name="description" content="privacycommand is a privacykey project — a forensic permission auditor for macOS, sibling to privacytracker." />
+<meta name="application-name" content="privacycommand" />
+<meta name="author" content="privacykey" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<link rel="canonical" href="https://privacycommand.privacykey.org/about.html" />
+
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0a0a18" media="(prefers-color-scheme: dark)" />
+<meta name="color-scheme" content="light dark" />
+
+<link rel="icon" href="assets/brand/privacycommand-icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="assets/brand/privacycommand-icon.svg" />
+<link rel="manifest" href="site.webmanifest" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="About — privacycommand · privacykey" />
+<meta property="og:description" content="Why privacycommand exists, who builds it, and how it fits with privatekey's other projects." />
+<meta property="og:url" content="https://privacycommand.privacykey.org/about.html" />
+<meta property="og:image" content="https://privacycommand.privacykey.org/assets/social/og-image.png" />
+
+<link rel="alternate" type="text/markdown" title="llms.txt" href="/llms.txt" />
+<link rel="preload" href="assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
+
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('pc-theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+  @font-face {
+    font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap;
+    src: url('assets/fonts/InterVariable.woff2') format('woff2-variations'),
+         url('assets/fonts/InterVariable.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Inter'; font-style: italic; font-weight: 100 900; font-display: swap;
+    src: url('assets/fonts/InterVariable-Italic.woff2') format('woff2-variations'),
+         url('assets/fonts/InterVariable-Italic.woff2') format('woff2');
+  }
+
+  :root {
+    --ink: #0F172A; --slate: #334155; --muted: #475569;
+    --line: #E2E8F0; --line-strong: #CBD5E1;
+    --surface: #FFFFFF; --surface-soft: #F8FAFC;
+    --indigo-deep: #1E1B4B; --indigo: #4338CA; --indigo-bright: #6366F1; --indigo-soft: #E0E7FF;
+    --purple: #5B21B6; --purple-light: #A78BFA;
+    --link-color: var(--indigo); --link-hover: #312E81;
+    --focus-ring: var(--indigo-bright);
+    --color-scheme: light;
+    --ease: cubic-bezier(.2,.7,.2,1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #f0f0f5; --slate: #c7d2dc; --muted: #a8a8b8;
+      --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
+      --surface: #111122; --surface-soft: #18182a;
+      --indigo: #818CF8; --indigo-bright: #A5B4FC; --indigo-soft: rgba(129,140,248,0.18);
+      --purple: #A78BFA; --purple-light: #C4B5FD;
+      --link-color: var(--indigo-bright); --link-hover: #C7D2FE;
+      --focus-ring: var(--indigo-bright);
+      --color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #f0f0f5; --slate: #c7d2dc; --muted: #a8a8b8;
+    --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
+    --surface: #111122; --surface-soft: #18182a;
+    --indigo: #818CF8; --indigo-bright: #A5B4FC; --indigo-soft: rgba(129,140,248,0.18);
+    --purple: #A78BFA; --purple-light: #C4B5FD;
+    --link-color: var(--indigo-bright); --link-hover: #C7D2FE;
+    --focus-ring: var(--indigo-bright);
+    --color-scheme: dark;
+  }
+
+  /* Beta chip (smaller variant for nav) — mirrors privacy/legal */
+  .beta-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 8px; border-radius: 99px;
+    background: rgba(251, 191, 36, 0.14);
+    color: #B45309;
+    border: 1px solid rgba(251, 191, 36, 0.40);
+    font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    white-space: nowrap; line-height: 1; margin-left: 8px;
+  }
+  .beta-chip .beta-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #FBBF24; box-shadow: 0 0 5px rgba(251, 191, 36, 0.7);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .beta-chip {
+      color: #FBBF24; background: rgba(251,191,36,0.14); border-color: rgba(251,191,36,0.30);
+    }
+  }
+  :root[data-theme="dark"] .beta-chip {
+    color: #FBBF24; background: rgba(251,191,36,0.14); border-color: rgba(251,191,36,0.30);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { color-scheme: var(--color-scheme); scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    color: var(--ink); background: var(--surface);
+    -webkit-font-smoothing: antialiased; line-height: 1.7;
+  }
+  a { color: var(--link-color); text-decoration: none; }
+  a:hover { color: var(--link-hover); text-decoration: underline; text-underline-offset: 2px; }
+  a:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; border-radius: 4px; }
+
+  .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .container.wide { max-width: 1180px; }
+
+  .accent {
+    background: linear-gradient(135deg, var(--indigo), var(--purple));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+
+  /* Nav (matches privacy.html / legal.html) */
+  nav.topnav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    background: rgba(255,255,255,0.72);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) nav.topnav { background: rgba(10,10,24,0.72); }
+  }
+  :root[data-theme="dark"] nav.topnav { background: rgba(10,10,24,0.72); }
+  nav.topnav .row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+  .brand-lockup { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); }
+  .brand-lockup .mark { width: 32px; height: 32px; }
+  .brand-lockup .mark img { width: 100%; height: 100%; }
+  .brand-lockup .name { font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
+  nav.topnav ul.links { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
+  nav.topnav ul.links a { color: var(--slate); font-size: 0.95rem; font-weight: 500; }
+  nav.topnav ul.links a:hover { color: var(--ink); text-decoration: none; }
+  @media (max-width: 760px) { nav.topnav ul.links { display: none; } }
+
+  /* Page hero */
+  .page-hero {
+    padding: 84px 0 48px;
+    background:
+      radial-gradient(800px 320px at 50% 0%, rgba(99,102,241,0.10), transparent 65%),
+      var(--surface);
+    border-bottom: 1px solid var(--line);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .page-hero {
+      background: radial-gradient(800px 320px at 50% 0%, rgba(129,140,248,0.16), transparent 65%), var(--surface);
+    }
+  }
+  :root[data-theme="dark"] .page-hero {
+    background: radial-gradient(800px 320px at 50% 0%, rgba(129,140,248,0.16), transparent 65%), var(--surface);
+  }
+  .page-hero .crumb {
+    font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--indigo); font-weight: 600; margin-bottom: 14px;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .page-hero .crumb::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--indigo-bright);
+    box-shadow: 0 0 0 4px rgba(99,102,241,0.18);
+  }
+  .page-hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+    letter-spacing: -0.03em; line-height: 1.1; margin: 0 0 14px;
+    color: var(--ink);
+  }
+  .page-hero p {
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    color: var(--slate); max-width: 60ch; margin: 0;
+  }
+
+  /* Article prose */
+  article.prose {
+    max-width: 720px; margin: 0 auto;
+    padding: 56px 24px 96px;
+    color: var(--ink);
+    font-size: 1.06rem; line-height: 1.7;
+  }
+  @media (max-width: 640px) {
+    article.prose { padding: 40px 20px 64px; font-size: 1rem; }
+  }
+  article.prose h2 {
+    font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em;
+    margin: 40px 0 14px; color: var(--ink);
+  }
+  article.prose p { margin: 0 0 16px; color: var(--slate); }
+  article.prose strong { color: var(--ink); font-weight: 600; }
+  article.prose hr { margin: 40px 0; border: 0; border-top: 1px solid var(--line); }
+
+  /* Brand mark row — the privacykey credit */
+  .brand-mark-row {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+  }
+  .brand-mark-row .mark {
+    width: 56px; height: 56px;
+    border-radius: 12px; overflow: hidden; flex-shrink: 0;
+    /* Green glow — mark belongs to privacykey */
+    box-shadow: 0 8px 20px -6px rgba(48,209,88,0.35);
+  }
+  .brand-mark-row .mark img { width: 100%; height: 100%; display: block; }
+  .brand-mark-row .lockup {
+    font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  /* "key" carries the privacykey wordmark gradient — green, not the page's indigo */
+  .brand-mark-row .lockup .accent {
+    background-image: linear-gradient(180deg, #30D158 0%, #30D158 60%, #166534 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+
+  /* Footer (matches privacy/legal) */
+  .site-footer {
+    padding: 48px 0; background: var(--surface-soft); border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 0.9rem;
+  }
+  .site-footer .row {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center;
+  }
+  .site-footer a { color: var(--slate); }
+</style>
+</head>
+<body>
+
+<nav class="topnav" aria-label="Primary">
+  <div class="container wide">
+    <div class="row">
+      <a href="index.html" class="brand-lockup" aria-label="privacycommand home">
+        <span class="mark" aria-hidden="true"><img src="assets/brand/privacycommand-icon.svg" alt="" /></span>
+        <span class="name">privacy<span class="accent">command</span></span>
+        <span class="beta-chip" aria-label="Currently in beta">
+          <span class="beta-dot" aria-hidden="true"></span>
+          Beta
+        </span>
+      </a>
+      <ul class="links" role="list">
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#install">Install</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="container">
+    <span class="crumb">About</span>
+    <h1>About <span class="accent">privacycommand.</span></h1>
+    <p>A small <a href="https://github.com/privacykey" rel="noopener">privacykey</a> project — a forensic permission auditor for macOS, sibling to <a href="https://privacytracker.privacykey.org/" rel="noopener">privacytracker</a>.</p>
+  </div>
+</header>
+
+<article class="prose">
+
+  <div class="brand-mark-row">
+    <span class="mark" aria-hidden="true"><img src="assets/brand/privacykey-icon-green.svg" alt="" /></span>
+    <div class="lockup">privacy<span class="accent">key</span></div>
+  </div>
+
+  <p>privacycommand is a <a href="https://github.com/privacykey" rel="noopener">privacykey</a> project. The maintainers are visible <a href="https://github.com/privacykey/privacycommand/graphs/contributors" rel="noopener">on GitHub</a>.</p>
+
+  <p>It exists because macOS already shows you the prompts an app asks for, but nothing tells you what's actually inside the bundle once it's installed — the embedded analytics SDKs, hard-coded domains, launch agents, the live file and network events the app produces on a normal run. Pulling all of that together used to take an afternoon and a stack of command-line tools. privacycommand runs every detector against every drop and explains every finding in plain English, so the report is shareable with someone who isn't a binary-analysis nerd.</p>
+
+  <p>The app is free and open source under the <a href="https://github.com/privacykey/privacycommand/blob/main/LICENSE" rel="noopener">MIT licence</a>, runs entirely on your Mac, and ships zero analytics. The full code is at <a href="https://github.com/privacykey/privacycommand" rel="noopener">github.com/privacykey/privacycommand</a>.</p>
+
+  <p>For bugs or feature ideas, <a href="https://github.com/privacykey/privacycommand/issues" rel="noopener">open an issue</a>. For security concerns, please follow <a href="https://github.com/privacykey/privacycommand/blob/main/SECURITY.md" rel="noopener">SECURITY.md</a> rather than a public report.</p>
+
+  <hr />
+
+  <p style="font-size:0.9rem;color:var(--muted);font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;">© 2026 privacykey. Built for the people who ask <em>what does this app actually do?</em></p>
+</article>
+
+<footer class="site-footer">
+  <div class="container wide">
+    <div class="row">
+      <div>© 2026 privacykey · privacycommand is free, open-source software.</div>
+      <div>
+        <a href="index.html">Home</a> ·
+        <a href="privacy.html">Privacy</a> ·
+        <a href="legal.html">Legal</a> ·
+        <a href="https://github.com/privacykey/privacycommand" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

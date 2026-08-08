@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+
+<title>Privacy policy — privacycommand</title>
+<meta name="description" content="What privacycommand collects (nothing), every third-party endpoint the app may contact, the explicit and bounded outbound calls, and how to go fully offline." />
+<meta name="application-name" content="privacycommand" />
+<meta name="author" content="privacykey" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<link rel="canonical" href="https://privacycommand.privacykey.org/privacy.html" />
+
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0a0a18" media="(prefers-color-scheme: dark)" />
+<meta name="color-scheme" content="light dark" />
+
+<link rel="icon" href="assets/brand/privacycommand-icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="assets/brand/privacycommand-icon.svg" />
+<link rel="manifest" href="site.webmanifest" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Privacy policy — privacycommand" />
+<meta property="og:description" content="The data posture of privacycommand, in plain English." />
+<meta property="og:url" content="https://privacycommand.privacykey.org/privacy.html" />
+
+<link rel="alternate" type="text/markdown" title="llms.txt" href="/llms.txt" />
+<link rel="preload" href="assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
+
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('pc-theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+  @font-face {
+    font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap;
+    src: url('assets/fonts/InterVariable.woff2') format('woff2-variations'),
+         url('assets/fonts/InterVariable.woff2') format('woff2');
+  }
+  :root {
+    --ink: #0F172A; --slate: #334155; --muted: #475569;
+    --line: #E2E8F0; --line-strong: #CBD5E1;
+    --surface: #FFFFFF; --surface-soft: #F8FAFC;
+    --indigo: #4338CA; --indigo-soft: #E0E7FF;
+    --purple: #5B21B6; --purple-light: #A78BFA;
+    --link-color: var(--indigo); --link-hover: #312E81;
+    --focus-ring: #6366F1;
+    --color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #f0f0f5; --slate: #c7d2dc; --muted: #a8a8b8;
+      --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
+      --surface: #111122; --surface-soft: #18182a;
+      --indigo: #818CF8; --indigo-soft: rgba(129,140,248,0.18);
+      --purple: #A78BFA; --purple-light: #C4B5FD;
+      --link-color: #A5B4FC; --link-hover: #C7D2FE;
+      --color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #f0f0f5; --slate: #c7d2dc; --muted: #a8a8b8;
+    --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
+    --surface: #111122; --surface-soft: #18182a;
+    --indigo: #818CF8; --indigo-soft: rgba(129,140,248,0.18);
+    --purple: #A78BFA; --purple-light: #C4B5FD;
+    --link-color: #A5B4FC; --link-hover: #C7D2FE;
+    --color-scheme: dark;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { color-scheme: var(--color-scheme); scroll-behavior: smooth; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    color: var(--ink); background: var(--surface);
+    -webkit-font-smoothing: antialiased; line-height: 1.7;
+  }
+  a { color: var(--link-color); text-decoration: none; }
+  a:hover { color: var(--link-hover); text-decoration: underline; text-underline-offset: 2px; }
+  a:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; border-radius: 4px; }
+  .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .container.wide { max-width: 1180px; }
+  h1, h2, h3 { color: var(--ink); margin: 0 0 12px; line-height: 1.2; letter-spacing: -0.02em; }
+  h1 { font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 800; margin-top: 64px; }
+  h2 { font-size: 1.4rem; font-weight: 700; margin-top: 40px; }
+  h3 { font-size: 1.1rem; font-weight: 600; margin-top: 28px; }
+  p { margin: 0 0 16px; color: var(--slate); }
+  ul { color: var(--slate); padding-left: 22px; }
+  ul li { margin-bottom: 8px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em;
+    background: var(--surface-soft); padding: 2px 6px; border-radius: 4px;
+    border: 1px solid var(--line); }
+  .accent {
+    background: linear-gradient(135deg, var(--indigo), var(--purple));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .lede { font-size: 1.15rem; color: var(--slate); }
+  .summary-box {
+    margin: 32px 0; padding: 22px;
+    background: var(--surface-soft);
+    border: 1px solid var(--line); border-radius: 14px;
+    border-left: 4px solid var(--indigo);
+  }
+  .summary-box h2 { margin-top: 0; }
+  .summary-box ul { margin-bottom: 0; }
+  table {
+    width: 100%; border-collapse: collapse; margin: 16px 0 24px;
+    font-size: 0.92rem;
+  }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--ink); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  td { color: var(--slate); }
+  td code { font-size: 0.85em; }
+  .last-updated { color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; }
+  /* Beta chip (smaller variant for nav) */
+  .beta-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 8px; border-radius: 99px;
+    background: rgba(251, 191, 36, 0.14);
+    color: #B45309;
+    border: 1px solid rgba(251, 191, 36, 0.40);
+    font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    white-space: nowrap; line-height: 1; margin-left: 8px;
+  }
+  .beta-chip .beta-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #FBBF24; box-shadow: 0 0 5px rgba(251, 191, 36, 0.7);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .beta-chip {
+      color: #FBBF24; background: rgba(251,191,36,0.14); border-color: rgba(251,191,36,0.30);
+    }
+  }
+  :root[data-theme="dark"] .beta-chip {
+    color: #FBBF24; background: rgba(251,191,36,0.14); border-color: rgba(251,191,36,0.30);
+  }
+
+  /* Nav (matches index.html) */
+  nav.topnav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    background: rgba(255,255,255,0.72);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) nav.topnav { background: rgba(10,10,24,0.72); }
+  }
+  :root[data-theme="dark"] nav.topnav { background: rgba(10,10,24,0.72); }
+  nav.topnav .row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+  .brand-lockup { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); }
+  .brand-lockup .mark { width: 32px; height: 32px; }
+  .brand-lockup .mark img { width: 100%; height: 100%; }
+  .brand-lockup .name { font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
+  nav.topnav ul.links { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
+  nav.topnav ul.links a { color: var(--slate); font-size: 0.95rem; font-weight: 500; }
+  nav.topnav ul.links a:hover { color: var(--ink); text-decoration: none; }
+  @media (max-width: 760px) { nav.topnav ul.links { display: none; } }
+  main { padding: 24px 0 96px; }
+  .site-footer {
+    padding: 48px 0; background: var(--surface-soft); border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 0.9rem;
+  }
+  .site-footer .row {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center;
+  }
+  .site-footer a { color: var(--slate); }
+</style>
+</head>
+<body>
+
+<nav class="topnav" aria-label="Primary">
+  <div class="container wide">
+    <div class="row">
+      <a href="index.html" class="brand-lockup" aria-label="privacycommand home">
+        <span class="mark" aria-hidden="true"><img src="assets/brand/privacycommand-icon.svg" alt="" /></span>
+        <span class="name">privacy<span class="accent">command</span></span>
+        <span class="beta-chip" aria-label="Currently in beta">
+          <span class="beta-dot" aria-hidden="true"></span>
+          Beta
+        </span>
+      </a>
+      <ul class="links" role="list">
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#install">Install</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <h1>Privacy <span class="accent">policy</span></h1>
+    <p class="last-updated">Last updated: 30 April 2026</p>
+    <p class="lede">privacycommand is a privacy tool. It behaves like one. This page documents what the app does and does not do with your data, every outbound network call it can make, and how to take it fully offline if you'd rather.</p>
+
+    <div class="summary-box">
+      <h2>The short version</h2>
+      <ul>
+        <li><strong>No analytics.</strong> privacycommand ships zero analytics, advertising, or attribution SDKs. There is no telemetry endpoint, no install counter, no crash-report bucket.</li>
+        <li><strong>All analysis is local.</strong> The inspected app's contents never leave your machine.</li>
+        <li><strong>Outbound calls are explicit and bounded.</strong> See the table below for every endpoint the app may contact.</li>
+        <li><strong>The privileged helper is opt-in.</strong> Without it, the app still works — file-event monitoring is unavailable and the network kill switch is disabled.</li>
+        <li><strong>Open source under MIT.</strong> Read the code, fork it, run it offline.</li>
+      </ul>
+    </div>
+
+    <h2>What we collect</h2>
+    <p>Nothing. privacycommand has no server. There is no account to create, no email to register, no licence key to validate. The maintainers have no way to know that you've installed the app, let alone what you've used it to inspect.</p>
+
+    <h2>Every outbound endpoint the app may contact</h2>
+    <p>privacycommand makes three categories of network call. Each is bounded, each is opt-out-able, and each is documented here.</p>
+
+    <table>
+      <thead>
+        <tr><th>Endpoint</th><th>When</th><th>What is sent</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>itunes.apple.com</code><br><code>apps.apple.com</code></td>
+          <td>When you inspect a Mac App Store app and the App Store cross-check is enabled.</td>
+          <td>The inspected app's bundle ID and country code. No information about you, no information about your machine, nothing about other apps you've inspected.</td>
+        </tr>
+        <tr>
+          <td>System DNS resolver<br>(<code>NSLookup</code> / <code>getaddrinfo</code>)</td>
+          <td>While dynamic monitoring is running, to label the destinations the inspected app contacts.</td>
+          <td>IP addresses observed in the inspected app's outbound traffic. No information about you. The query is reverse-only — the resolver is not asked to look up anything you didn't already see traffic to.</td>
+        </tr>
+        <tr>
+          <td><code>privacykey.github.io</code></td>
+          <td>When the app checks for updates via Sparkle.</td>
+          <td>Your IP and User-Agent (as with any HTTP request). No information about which app you're inspecting. Auto-checks are <strong>off by default</strong> — opt in via Settings → Updates. The appcast feed is signed with EdDSA so a tampered response can't push an update.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>What we explicitly do not do</h3>
+    <ul>
+      <li>No analytics service. No Firebase, no Mixpanel, no Amplitude, no Sentry, no PostHog, no Segment, no homebrewed pixel.</li>
+      <li>No crash-report SDK. macOS' built-in crash reporter applies; it sends to Apple, not to us.</li>
+      <li>No referrer tracking when you click links from the app.</li>
+      <li>No fingerprinting. We don't know your machine's model, OS version, or chip family.</li>
+    </ul>
+
+    <h2>The privileged helper</h2>
+    <p>privacycommand bundles an optional helper (<code>org.privacykey.privacycommand.HelperTool</code>) that runs as root. You're prompted to install it the first time you ask for a feature that needs it; you can decline, and the rest of the app keeps working. The helper exists to:</p>
+    <ul>
+      <li>Run <code>fs_usage</code> on your behalf to capture file-event traces from the inspected app.</li>
+      <li>Run <code>sfltool</code> to enumerate background tasks the app has registered (so the audit doesn't trigger a system admin prompt).</li>
+      <li>Install and remove a <code>pf</code> packet-filter anchor when you flip the network kill switch on or off.</li>
+    </ul>
+    <p>The helper validates clients by Team ID on connect — a binary not signed by the same Team ID can't talk to it. The full helper source is in <code>privacycommand/Sources/privacycommandHelper/</code> in the public repo.</p>
+
+    <h2>Reports and what's in them</h2>
+    <p>Every audit you run produces a report containing the inspected app's bundle ID, version, code-signing identity, and the output of every detector. Reports are written to <code>~/Library/Application Support/privacycommand/runs/</code> on your machine. They are never uploaded anywhere. You can export a report as JSON, HTML, or PDF; what you do with the export afterwards is up to you.</p>
+
+    <h2>Going fully offline</h2>
+    <p>You can run privacycommand with no outbound network at all by turning off three things in Settings:</p>
+    <ul>
+      <li><strong>App Store cross-check.</strong> Disable to skip <code>itunes.apple.com</code> and <code>apps.apple.com</code> requests.</li>
+      <li><strong>Reverse DNS labels.</strong> Disable to skip system resolver queries during monitoring — destinations will show as raw IPs.</li>
+      <li><strong>Update checks.</strong> Off by default; verify under Settings → Updates that auto-checks are still off.</li>
+    </ul>
+    <p>If you're on a managed network that blocks GitHub or Apple endpoints by policy, the app degrades gracefully — features that require those endpoints are simply unavailable and the rest still works.</p>
+
+    <h2>Changes to this page</h2>
+    <p>The canonical version of this page lives in the <a href="https://github.com/privacykey/privacycommand/tree/main/docs" rel="noopener">project repository</a>. Material changes are announced in release notes. The hash of the previous version is committed alongside so you can see what changed.</p>
+
+    <h2>Contact</h2>
+    <p>For privacy questions: <a href="mailto:privacy@privacykey.org">privacy@privacykey.org</a>. For security disclosures: <a href="mailto:security@privacykey.org">security@privacykey.org</a> (please don't open public GitHub issues for security findings — see the <a href="https://github.com/privacykey/privacycommand/blob/main/SECURITY.md" rel="noopener">SECURITY.md</a> for the full process).</p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container wide">
+    <div class="row">
+      <div>© 2026 privacykey · privacycommand is free, open-source software.</div>
+      <div>
+        <a href="index.html">Home</a> ·
+        <a href="about.html">About</a> ·
+        <a href="legal.html">Legal</a> ·
+        <a href="https://github.com/privacykey/privacycommand" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

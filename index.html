@@ -1,0 +1,1710 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+
+<!-- ─────────────────────────────────────────────────────────
+     Page identity
+     ───────────────────────────────────────────────────────── -->
+<title>privacycommand — Drop an app. See everything it touches.</title>
+<meta name="description" content="privacycommand is a free, open-source Mac forensic auditor. Drop a .app bundle and see every entitlement, signed identity, hard-coded domain, telemetry SDK, login item, and live file or network event the app actually uses. Built for IT, security, and DFIR teams. From the makers of privacykey." />
+<meta name="application-name" content="privacycommand" />
+<meta name="keywords" content="macOS forensics, app permission auditor, entitlements, code signing, notarization, telemetry, privacy manifest, SDK fingerprinting, fs_usage, DFIR, mac IT, privacykey" />
+<meta name="author" content="privacykey" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="googlebot" content="index, follow" />
+<link rel="canonical" href="https://privacycommand.privacykey.org/" />
+
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0a0a18" media="(prefers-color-scheme: dark)" />
+<meta name="color-scheme" content="light dark" />
+
+<!-- Favicons / app icons — site uses the privacycommand brand mark -->
+<link rel="icon" href="assets/brand/privacycommand-icon.svg" type="image/svg+xml" />
+<link rel="mask-icon" href="assets/brand/privacycommand-icon.svg" color="#4338CA" />
+<link rel="apple-touch-icon" href="assets/brand/privacycommand-icon.svg" />
+<link rel="manifest" href="site.webmanifest" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="privacycommand" />
+<meta name="msapplication-TileColor" content="#0a0a18" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="privacycommand" />
+<meta property="og:title" content="privacycommand — Drop an app. See everything it touches." />
+<meta property="og:description" content="A free, open-source macOS forensic auditor. Drop a .app and get the full story — entitlements, signing, SDKs, telemetry, network, file events." />
+<meta property="og:url" content="https://privacycommand.privacykey.org/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://privacycommand.privacykey.org/assets/social/og-image.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="privacycommand — drop an app, see everything it touches." />
+
+<!-- Twitter / X card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="privacycommand — Drop an app. See everything it touches." />
+<meta name="twitter:description" content="A free, open-source macOS forensic auditor for IT, security, and DFIR teams." />
+<meta name="twitter:image" content="https://privacycommand.privacykey.org/assets/social/og-image.png" />
+
+<!-- Schema.org — SoftwareApplication -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "privacycommand",
+  "applicationCategory": "SecurityApplication",
+  "applicationSubCategory": "Forensics",
+  "operatingSystem": "macOS 13+",
+  "description": "A free, open-source macOS forensic auditor that drops onto any .app bundle and reports every entitlement, signed identity, hard-coded domain, embedded SDK, login item, and live file or network event the app uses.",
+  "url": "https://privacycommand.privacykey.org/",
+  "downloadUrl": "https://github.com/privacykey/privacycommand/releases/latest",
+  "image": "https://privacycommand.privacykey.org/assets/social/og-image.png",
+  "softwareVersion": "1.0",
+  "license": "https://opensource.org/license/mit/",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "privacykey",
+    "url": "https://github.com/privacykey",
+    "logo": "https://privacycommand.privacykey.org/assets/brand/privacycommand-icon.svg"
+  },
+  "featureList": [
+    "Static analysis of entitlements, code-signing, notarization, hard-coded domains, embedded SDKs",
+    "Apple Privacy Manifest cross-check against actual binary behaviour",
+    "Telemetry callout with heat-graded analytics SDK count",
+    "Background Task Management audit (login items, launch agents, daemons)",
+    "Live monitoring of file events, network destinations, child processes, pasteboard, camera, microphone",
+    "Network kill switch via pf anchor — block the inspected app's outbound traffic",
+    "VM mode — analyse risky apps inside a macOS VM via guest agent",
+    "Reports export as JSON, HTML, or PDF",
+    "Local-first — analysis stays on your machine, no telemetry"
+  ]
+}
+</script>
+
+<!-- Schema.org — FAQPage. Mirrors the on-page #faq section verbatim. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is privacycommand really free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Free and open-source under the MIT licence. No accounts, no subscriptions, no upsells. The full source is on GitHub for anyone to read or fork."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does privacycommand need admin / root access?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, not for the core report. Static analysis, App Store privacy-label cross-check, and Background Task Management audit run unprivileged. The optional helper unlocks live file-event monitoring (fs_usage) and the network kill switch (pf anchor) — installing it asks for admin once, after which it stays out of your way."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does privacycommand send anything anywhere?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "All analysis runs locally. The app makes three explicit, bounded network calls: DNS reverse lookups for destinations the inspected app contacts (so the Network tab can label 8.8.8.8 as dns.google), Mac App Store privacy-label lookups against itunes.apple.com keyed on the inspected app's bundle ID, and the Sparkle appcast fetch when you check for updates. The inspected app's contents never leave your machine."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it a malware sandbox?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not exactly. privacycommand is a forensic auditor — it tells you what an app contains and what it does on a normal run. For risky apps you'd rather not run on bare metal, VM mode lets you ship the same analysis into a macOS VM (VirtualBuddy, UTM, Parallels) and stream observations back. It's adjacent to a sandbox; it's optimised for transparency rather than detonation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Apple Silicon, Intel, both?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Both. The DMG is a universal binary signed and notarized for macOS 13 (Ventura) and later. The Homebrew cask resolves to the same artefact."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What kinds of apps can I drop on it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Any .app bundle, plus .dmg installers — privacycommand will mount and inspect the bundle inside. Mac App Store apps, Developer ID apps, Catalyst, Electron, Tauri, Java-on-mac wrappers, command-line apps wrapped as .app — they all parse. Apps without a bundle (raw command-line binaries) are out of scope today."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does it find that I couldn't find by hand?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The same things you could find with codesign, otool, plutil, fs_usage, sfltool, and a stack of grep — except cross-referenced and explained. The point is consistency: privacycommand runs every detector against every drop, in the same shape, and explains every finding in plain English so the report is shareable with someone who isn't a binary-analysis nerd."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I export reports for a ticket or a vendor review?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — every audit exports as JSON, HTML, or PDF. The HTML and PDF exports are designed to read like an IT vendor-review one-pager; the JSON keeps every detector's raw output for downstream tooling."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- AI / LLM crawl etiquette -->
+<link rel="alternate" type="text/markdown" title="llms.txt — site summary for AI agents" href="/llms.txt" />
+
+<!-- Fonts — self-hosted Inter (SIL OFL-1.1) -->
+<link rel="preload" href="assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
+<script>
+  /* Boot-time theme application — runs before paint to avoid flash */
+  (function () {
+    try {
+      var saved = localStorage.getItem('pc-theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch (e) { /* localStorage unavailable */ }
+  })();
+</script>
+
+<style>
+  /* ── Self-hosted Inter (v4.1, SIL OFL-1.1) ── */
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('assets/fonts/InterVariable.woff2') format('woff2-variations'),
+         url('assets/fonts/InterVariable.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('assets/fonts/InterVariable-Italic.woff2') format('woff2-variations'),
+         url('assets/fonts/InterVariable-Italic.woff2') format('woff2');
+  }
+
+  /* ============================================================
+     Tokens
+     - Marketing surface: light, indigo/purple accents (privacycommand)
+     - Mockup surface: dark macOS UI, mirrors the actual app
+     ============================================================ */
+  :root {
+    /* Neutrals */
+    --ink: #0F172A;
+    --slate: #334155;
+    --muted: #475569;
+    --line: #E2E8F0;
+    --line-strong: #CBD5E1;
+    --surface: #FFFFFF;
+    --surface-soft: #F8FAFC;
+    --surface-softer: #F1F5F9;
+
+    /* Indigo brand — primary accent (drawn from privacycommand brand SVGs) */
+    --indigo-deep: #1E1B4B;       /* deepest indigo — used in dark UI */
+    --indigo: #4338CA;            /* primary brand indigo */
+    --indigo-bright: #6366F1;
+    --indigo-light: #A5B4FC;
+    --indigo-soft: #E0E7FF;
+    --indigo-softer: #EEF2FF;
+
+    /* Purple — secondary highlight (the 'command' wordmark gradient) */
+    --purple: #5B21B6;
+    --purple-bright: #7C3AED;
+    --purple-light: #A78BFA;
+
+    /* Yellow — magnifier-badge accent, used sparingly */
+    --amber: #FBBF24;
+    --amber-soft: #FEF3C7;
+
+    /* Mockup-only tokens (dark macOS UI) */
+    --mock-bg: #0a0a18;
+    --mock-bg-2: #111122;
+    --mock-bg-3: #18182a;
+    --mock-surface: rgba(255,255,255,0.04);
+    --mock-surface-hover: rgba(255,255,255,0.07);
+    --mock-surface-active: rgba(255,255,255,0.10);
+    --mock-border: rgba(255,255,255,0.07);
+    --mock-border-strong: rgba(255,255,255,0.13);
+    --mock-text: #f0f0f5;
+    --mock-text-2: #a8a8b8;
+    --mock-text-3: #8e8e9e;
+    --mock-indigo: #818CF8;
+    --mock-indigo-dim: rgba(99,102,241,0.18);
+    --mock-purple: #A78BFA;
+
+    /* Severity scale — exact macOS system colours */
+    --sev-red: #ff453a;
+    --sev-red-dim: rgba(255,69,58,0.12);
+    --sev-orange: #ff9f0a;
+    --sev-orange-dim: rgba(255,159,10,0.12);
+    --sev-yellow: #ffd60a;
+    --sev-yellow-dim: rgba(255,214,10,0.10);
+    --sev-green: #30d158;
+    --sev-green-dim: rgba(48,209,88,0.12);
+
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+    --radius-xl: 28px;
+
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.05);
+    --shadow-md: 0 8px 24px -8px rgba(15,23,42,.10), 0 2px 6px rgba(15,23,42,.04);
+    --shadow-lg: 0 30px 60px -30px rgba(10,10,24,.45), 0 12px 32px -12px rgba(10,10,24,.30);
+    --shadow-indigo: 0 6px 18px -6px rgba(67,56,202,0.5);
+
+    --duration: 600ms;
+    --ease: cubic-bezier(.2,.7,.2,1);
+
+    /* Themed surfaces */
+    --hero-bg:
+      radial-gradient(1200px 500px at 80% -10%, rgba(99,102,241,0.10), transparent 65%),
+      radial-gradient(900px 400px at 5% 20%, rgba(91,33,182,0.06), transparent 60%),
+      linear-gradient(180deg, #fff 0%, var(--surface-soft) 100%);
+    --nav-bg: rgba(255,255,255,0.72);
+    --nav-bg-scrolled: rgba(255,255,255,0.88);
+    --card-bg: linear-gradient(135deg, #fff 0%, var(--surface-soft) 100%);
+    --card-glow: rgba(99,102,241,0.12);
+    --step-bg: #fff;
+    --accent-from: var(--indigo);
+    --accent-to: var(--purple);
+    --link-color: var(--indigo);
+    --link-hover: #312E81;
+    --focus-ring: var(--indigo-bright);
+    --selection-bg: var(--indigo-soft);
+    --selection-fg: var(--indigo-deep);
+    --check-bg: var(--indigo-soft);
+    --color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #f0f0f5;
+      --slate: #c7d2dc;
+      --muted: #a8a8b8;
+      --line: rgba(255,255,255,0.08);
+      --line-strong: rgba(255,255,255,0.18);
+      --surface: #111122;
+      --surface-soft: #18182a;
+      --surface-softer: #1e1e30;
+
+      --indigo: #818CF8;
+      --indigo-bright: #A5B4FC;
+      --indigo-soft: rgba(129,140,248,0.18);
+      --indigo-softer: rgba(129,140,248,0.10);
+
+      --purple: #A78BFA;
+      --purple-bright: #C4B5FD;
+      --purple-light: #C4B5FD;
+
+      --hero-bg:
+        radial-gradient(1200px 500px at 80% -10%, rgba(129,140,248,0.18), transparent 65%),
+        radial-gradient(900px 400px at 5% 20%, rgba(91,33,182,0.18), transparent 60%),
+        linear-gradient(180deg, #14142a 0%, #0a0a18 100%);
+      --nav-bg: rgba(10,10,24,0.72);
+      --nav-bg-scrolled: rgba(10,10,24,0.88);
+      --card-bg: linear-gradient(135deg, #18182a 0%, #111122 100%);
+      --card-glow: rgba(129,140,248,0.18);
+      --step-bg: #18182a;
+      --accent-from: var(--indigo);
+      --accent-to: var(--purple);
+      --link-color: var(--indigo-bright);
+      --link-hover: #C7D2FE;
+      --focus-ring: var(--indigo-bright);
+      --selection-bg: rgba(129,140,248,0.30);
+      --selection-fg: #f0f0f5;
+      --check-bg: rgba(129,140,248,0.22);
+      --color-scheme: dark;
+
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #f0f0f5;
+    --slate: #c7d2dc;
+    --muted: #a8a8b8;
+    --line: rgba(255,255,255,0.08);
+    --line-strong: rgba(255,255,255,0.18);
+    --surface: #111122;
+    --surface-soft: #18182a;
+    --surface-softer: #1e1e30;
+
+    --indigo: #818CF8;
+    --indigo-bright: #A5B4FC;
+    --indigo-soft: rgba(129,140,248,0.18);
+    --indigo-softer: rgba(129,140,248,0.10);
+
+    --purple: #A78BFA;
+    --purple-bright: #C4B5FD;
+    --purple-light: #C4B5FD;
+
+    --hero-bg:
+      radial-gradient(1200px 500px at 80% -10%, rgba(129,140,248,0.18), transparent 65%),
+      radial-gradient(900px 400px at 5% 20%, rgba(91,33,182,0.18), transparent 60%),
+      linear-gradient(180deg, #14142a 0%, #0a0a18 100%);
+    --nav-bg: rgba(10,10,24,0.72);
+    --nav-bg-scrolled: rgba(10,10,24,0.88);
+    --card-bg: linear-gradient(135deg, #18182a 0%, #111122 100%);
+    --card-glow: rgba(129,140,248,0.18);
+    --step-bg: #18182a;
+    --accent-from: var(--indigo);
+    --accent-to: var(--purple);
+    --link-color: var(--indigo-bright);
+    --link-hover: #C7D2FE;
+    --focus-ring: var(--indigo-bright);
+    --selection-bg: rgba(129,140,248,0.30);
+    --selection-fg: #f0f0f5;
+    --check-bg: rgba(129,140,248,0.22);
+    --color-scheme: dark;
+
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,.6);
+  }
+
+  /* ── Base ── */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { color-scheme: var(--color-scheme); scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    color: var(--ink); background: var(--surface);
+    -webkit-font-smoothing: antialiased; line-height: 1.6;
+    transition: background-color 200ms var(--ease), color 200ms var(--ease);
+  }
+  ::selection { background: var(--selection-bg); color: var(--selection-fg); }
+  a { color: var(--link-color); text-decoration: none; transition: color 160ms var(--ease); }
+  a:hover { color: var(--link-hover); }
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--focus-ring); outline-offset: 3px; border-radius: 4px;
+  }
+  img, svg { max-width: 100%; display: block; }
+
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+
+  h1, h2, h3, h4, h5 { color: var(--ink); margin: 0 0 12px; line-height: 1.2; letter-spacing: -0.02em; }
+  h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 800; }
+  h2 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); font-weight: 700; }
+  h3 { font-size: 1.25rem; font-weight: 700; }
+  p { margin: 0 0 14px; color: var(--slate); }
+  .lede { font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: var(--slate); max-width: 64ch; }
+  .accent {
+    background: linear-gradient(135deg, var(--accent-from), var(--accent-to));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+
+  /* ── Skip link ── */
+  .skip-link {
+    position: absolute; left: -10000px; top: 8px;
+    background: var(--indigo-deep); color: #fff; padding: 8px 14px; border-radius: 8px;
+    font-size: 0.9rem; font-weight: 600; z-index: 1000;
+  }
+  .skip-link:focus { left: 12px; }
+
+  /* ── Beta chip (used in hero CTA + nav) ── */
+  .beta-chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 6px 12px; border-radius: 99px;
+    background: rgba(251, 191, 36, 0.14);
+    color: #B45309;                                /* amber-700 — passes 4.5:1 on light surfaces */
+    border: 1px solid rgba(251, 191, 36, 0.40);
+    font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    white-space: nowrap; line-height: 1;
+    transition: background 160ms var(--ease), border-color 160ms var(--ease), color 160ms var(--ease);
+  }
+  .beta-chip:hover {
+    background: rgba(251, 191, 36, 0.22);
+    border-color: rgba(251, 191, 36, 0.55);
+    color: #92400E;
+  }
+  .beta-chip .beta-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 6px rgba(251, 191, 36, 0.7);
+    flex-shrink: 0;
+  }
+  .beta-chip .version-num {
+    font-weight: 600; opacity: 0.9;
+    font-variant-numeric: tabular-nums; letter-spacing: 0;
+    text-transform: none;
+  }
+  /* Smaller variant for the topnav */
+  .beta-chip-nav {
+    font-size: 0.62rem;
+    padding: 3px 8px;
+    letter-spacing: 0.08em;
+    margin-left: 8px;
+  }
+  /* Dark mode — keep amber visible against dark surfaces */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .beta-chip {
+      color: var(--amber);
+      background: rgba(251, 191, 36, 0.14);
+      border-color: rgba(251, 191, 36, 0.30);
+    }
+    :root:not([data-theme="light"]) .beta-chip:hover {
+      color: var(--amber);
+      background: rgba(251, 191, 36, 0.22);
+    }
+  }
+  :root[data-theme="dark"] .beta-chip {
+    color: var(--amber);
+    background: rgba(251, 191, 36, 0.14);
+    border-color: rgba(251, 191, 36, 0.30);
+  }
+  :root[data-theme="dark"] .beta-chip:hover {
+    color: var(--amber);
+    background: rgba(251, 191, 36, 0.22);
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 999px; font-weight: 600;
+    font-size: 0.95rem; line-height: 1; min-height: 40px;
+    border: 1px solid transparent; cursor: pointer;
+    transition: transform 160ms var(--ease), box-shadow 160ms var(--ease), background 160ms var(--ease), color 160ms var(--ease);
+    white-space: nowrap;
+  }
+  .btn-lg { padding: 14px 22px; font-size: 1rem; min-height: 48px; }
+  .btn-primary {
+    background: linear-gradient(180deg, #4F46E5 0%, #4338CA 100%);
+    color: #fff; box-shadow: var(--shadow-indigo);
+  }
+  .btn-primary:hover {
+    background: linear-gradient(180deg, #6366F1 0%, #4F46E5 100%);
+    color: #fff;
+    box-shadow: 0 10px 24px -6px rgba(67,56,202,0.6);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    background: transparent; color: var(--ink);
+    border-color: var(--line-strong);
+  }
+  .btn-ghost:hover { background: var(--surface-soft); color: var(--ink); }
+
+  /* ── Nav ── */
+  nav.topnav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    background: var(--nav-bg);
+    border-bottom: 1px solid transparent;
+    transition: background 160ms var(--ease), border-color 160ms var(--ease);
+  }
+  nav.topnav.scrolled { background: var(--nav-bg-scrolled); border-bottom-color: var(--line); }
+  nav.topnav .row { padding: 12px 0; }
+  .brand-lockup { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); }
+  .brand-lockup .mark { width: 32px; height: 32px; display: grid; place-items: center; }
+  .brand-lockup .mark img { width: 100%; height: 100%; }
+  .brand-lockup .name { font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
+  nav.topnav ul.links { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
+  nav.topnav ul.links a { color: var(--slate); font-size: 0.95rem; font-weight: 500; }
+  nav.topnav ul.links a:hover { color: var(--ink); }
+  .theme-toggle {
+    width: 40px; height: 40px; border-radius: 999px;
+    background: transparent; border: 1px solid var(--line);
+    color: var(--slate); display: grid; place-items: center; cursor: pointer;
+    transition: background 160ms var(--ease), color 160ms var(--ease), border-color 160ms var(--ease);
+  }
+  .theme-toggle:hover { color: var(--ink); border-color: var(--line-strong); background: var(--surface-soft); }
+  .theme-toggle .icon-sun { display: none; }
+  .theme-dark .theme-toggle .icon-moon { display: none; }
+  .theme-dark .theme-toggle .icon-sun { display: block; }
+
+  @media (max-width: 760px) {
+    nav.topnav ul.links { display: none; }
+  }
+
+  /* ── Sections ── */
+  section { padding: 96px 0; }
+  section.tight { padding: 24px 0; }
+  section.bg-soft { background: var(--surface-soft); }
+  section.bg-dark { background: var(--mock-bg); color: var(--mock-text); }
+  section.bg-dark h2, section.bg-dark h3 { color: var(--mock-text); }
+  section.bg-dark p { color: var(--mock-text-2); }
+
+  .eyebrow {
+    display: inline-block; font-size: 0.85rem; font-weight: 600;
+    color: var(--indigo); letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .kicker {
+    display: inline-block; font-size: 0.78rem; font-weight: 600;
+    color: var(--indigo); letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 999px;
+    background: var(--indigo-soft); margin-bottom: 14px;
+  }
+
+  /* ── Reveal-on-scroll ── */
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity var(--duration) var(--ease), transform var(--duration) var(--ease); }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal.delay-1 { transition-delay: 80ms; }
+  .reveal.delay-2 { transition-delay: 160ms; }
+  .reveal.delay-3 { transition-delay: 240ms; }
+  .reveal.delay-4 { transition-delay: 320ms; }
+
+  /* ── Hero ── */
+  .hero { background: var(--hero-bg); padding: 64px 0 48px; }
+  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin: 28px 0 36px; }
+  .cta-meta { color: var(--muted); font-size: 0.9rem; }
+
+  /* Hero stage — the dark-app mockup window */
+  .hero-stage { margin-top: 36px; }
+
+  /* ── Mock window chrome (dark macOS UI) ── */
+  .mock-window {
+    background: var(--mock-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    border: 1px solid var(--mock-border);
+    color: var(--mock-text);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 700ms var(--ease), opacity 700ms var(--ease);
+  }
+  .mock-window.lifted { transform: none; opacity: 1; }
+  .mock-titlebar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px;
+    background: linear-gradient(180deg, #16162a, #101022);
+    border-bottom: 1px solid var(--mock-border);
+  }
+  .mock-titlebar .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .mock-titlebar .dot.r { background: #ff5f57; }
+  .mock-titlebar .dot.y { background: #febc2e; }
+  .mock-titlebar .dot.g { background: #28c840; }
+  .mock-titlebar .title { margin-left: 10px; font-size: 0.82rem; color: var(--mock-text-3); flex: 1; text-align: center; padding-right: 60px; }
+
+  .mock-canvas { display: grid; grid-template-rows: auto 1fr; min-height: 420px; }
+  .mock-nav {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 16px;
+    background: var(--mock-bg-2);
+    border-bottom: 1px solid var(--mock-border);
+  }
+  .mock-nav .logo { width: 22px; height: 22px; }
+  .mock-nav .logo img { width: 100%; height: 100%; }
+  .mock-nav .name { font-weight: 600; font-size: 0.85rem; color: var(--mock-text); }
+  .mock-nav .tabs { display: flex; gap: 4px; flex: 1; justify-content: center; }
+  .mock-nav .tab {
+    background: transparent; border: 0; color: var(--mock-text-2);
+    padding: 6px 12px; border-radius: 6px; font-size: 0.82rem; font-weight: 500;
+    cursor: pointer; transition: background 160ms var(--ease), color 160ms var(--ease);
+  }
+  .mock-nav .tab:hover { color: var(--mock-text); background: var(--mock-surface); }
+  .mock-nav .tab.active { color: var(--mock-text); background: var(--mock-indigo-dim); }
+  .mock-nav .right { display: flex; align-items: center; gap: 10px; color: var(--mock-text-3); }
+
+  .mock-body { padding: 18px 20px; background: var(--mock-bg); min-height: 360px; position: relative; }
+
+  /* Mock panels — switched by the .mock-nav tabs */
+  .mock-panel { display: none; animation: panelFade 220ms var(--ease); }
+  .mock-panel.is-active { display: block; }
+  @keyframes panelFade {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mock-panel { animation: none; }
+  }
+
+  /* Section heading inside a mock panel */
+  .mock-section-title {
+    font-size: 0.78rem; font-weight: 600; color: var(--mock-text-3);
+    text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 10px;
+  }
+
+  /* Telemetry panel — heat-graded SDK breakdown */
+  .telemetry-summary {
+    display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center;
+    padding: 14px 16px; background: var(--mock-surface);
+    border: 1px solid var(--mock-border); border-radius: var(--radius);
+    margin-bottom: 14px;
+  }
+  .telemetry-count {
+    font-size: 2.2rem; font-weight: 800; line-height: 1;
+    color: var(--sev-orange); letter-spacing: -0.02em;
+  }
+  .telemetry-count .lbl { display: block; font-size: 0.72rem; font-weight: 600;
+    color: var(--mock-text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 6px; }
+  .telemetry-bars { display: grid; gap: 6px; }
+  .telemetry-bar { display: grid; grid-template-columns: 90px 1fr 30px; gap: 10px; align-items: center;
+    font-size: 0.78rem; }
+  .telemetry-bar .name { color: var(--mock-text-2); }
+  .telemetry-bar .track { height: 6px; background: var(--mock-surface); border-radius: 99px; overflow: hidden; }
+  .telemetry-bar .fill { height: 100%; border-radius: 99px; }
+  .telemetry-bar .num { color: var(--mock-text); font-variant-numeric: tabular-nums; text-align: right; font-weight: 600; }
+  .telemetry-list { display: grid; gap: 6px; }
+  .telemetry-row {
+    display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center;
+    padding: 8px 12px; background: var(--mock-surface); border: 1px solid var(--mock-border);
+    border-radius: 8px; font-size: 0.82rem;
+  }
+  .telemetry-row .sdk { color: var(--mock-text); font-weight: 600; }
+  .telemetry-row .cat {
+    font-size: 0.68rem; padding: 2px 8px; border-radius: 99px;
+    background: var(--mock-indigo-dim); color: var(--mock-indigo);
+    text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600;
+  }
+  .telemetry-row .src { font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem; color: var(--mock-text-3); }
+
+  /* Network panel — destinations + kill switch */
+  .net-toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px; background: var(--mock-surface);
+    border: 1px solid var(--mock-border); border-radius: var(--radius);
+    margin-bottom: 10px;
+  }
+  .net-toolbar .label { font-size: 0.78rem; color: var(--mock-text-2); }
+  .net-toolbar .label strong { color: var(--mock-text); }
+  .kill-switch {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px; border-radius: 99px; cursor: pointer;
+    background: var(--sev-red-dim); color: var(--sev-red);
+    border: 1px solid rgba(255,69,58,0.25);
+    font-size: 0.78rem; font-weight: 600;
+  }
+  .kill-switch::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--sev-red); box-shadow: 0 0 8px var(--sev-red);
+  }
+  .net-list { display: grid; gap: 6px; max-height: 260px; overflow: hidden; }
+  .net-row {
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: 12px; align-items: center;
+    padding: 8px 12px; background: var(--mock-surface); border: 1px solid var(--mock-border);
+    border-radius: 8px; font-size: 0.82rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .net-row .verb { font-size: 0.68rem; padding: 2px 8px; border-radius: 4px;
+    background: var(--mock-indigo-dim); color: var(--mock-indigo); font-weight: 600; }
+  .net-row .host { color: var(--mock-text); }
+  .net-row .ip { color: var(--mock-text-3); font-size: 0.72rem; }
+  .net-row .bytes { color: var(--mock-text-2); font-size: 0.72rem; text-align: right; }
+
+  /* Monitoring panel — file event stream */
+  .stream {
+    background: var(--mock-bg-2); border: 1px solid var(--mock-border);
+    border-radius: var(--radius); padding: 12px 14px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.78rem; line-height: 1.7;
+    max-height: 280px; overflow: hidden;
+  }
+  .stream .ts { color: var(--mock-text-3); margin-right: 10px; }
+  .stream .op { font-weight: 600; margin-right: 8px; }
+  .stream .op.read { color: var(--mock-indigo); }
+  .stream .op.write { color: var(--sev-orange); }
+  .stream .op.exec { color: var(--mock-purple); }
+  .stream .op.net { color: var(--sev-yellow); }
+  .stream .path { color: var(--mock-text); }
+  .stream .pid { color: var(--mock-text-3); }
+
+  /* Static panel — re-uses the row styling from the "how it reads" section, scoped */
+  .static-rows { display: grid; gap: 10px; }
+  .static-row {
+    display: flex; justify-content: space-between; align-items: center; gap: 14px;
+    padding: 10px 14px; background: var(--mock-surface);
+    border: 1px solid var(--mock-border); border-radius: var(--radius);
+  }
+  .static-row .lbl { font-size: 0.9rem; font-weight: 600; color: var(--mock-text); margin-bottom: 2px; }
+  .static-row .det { font-size: 0.76rem; color: var(--mock-text-3);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .static-row .pill {
+    font-size: 0.68rem; font-weight: 600; padding: 3px 10px; border-radius: 99px;
+    text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
+  }
+  .pill.green { background: var(--sev-green-dim); color: var(--sev-green); }
+  .pill.red { background: var(--sev-red-dim); color: var(--sev-red); }
+  .pill.orange { background: var(--sev-orange-dim); color: var(--sev-orange); }
+  .pill.yellow { background: var(--sev-yellow-dim); color: var(--sev-yellow); }
+  .pill.indigo { background: var(--mock-indigo-dim); color: var(--mock-indigo); }
+
+  /* Drop zone — visual element in hero mock */
+  .drop-zone {
+    border: 1.5px dashed var(--mock-border-strong);
+    border-radius: var(--radius);
+    padding: 28px 20px;
+    text-align: center;
+    color: var(--mock-text-2);
+    background: var(--mock-surface);
+    margin-bottom: 20px;
+    transition: border-color 160ms var(--ease), background 160ms var(--ease);
+  }
+  .drop-zone strong { color: var(--mock-text); display: block; font-size: 1rem; margin-bottom: 4px; }
+  .drop-zone .hint { font-size: 0.82rem; }
+  .drop-zone:hover { border-color: var(--mock-indigo); background: var(--mock-indigo-dim); }
+
+  /* Findings list — used in hero + dashboard scroll */
+  .findings { display: grid; gap: 10px; }
+  .finding {
+    display: grid; grid-template-columns: 32px 1fr auto; gap: 14px; align-items: center;
+    padding: 12px 14px;
+    background: var(--mock-surface);
+    border: 1px solid var(--mock-border);
+    border-radius: var(--radius);
+    transition: background 160ms var(--ease), border-color 160ms var(--ease);
+  }
+  .finding:hover { background: var(--mock-surface-hover); border-color: var(--mock-border-strong); }
+  .finding .sev {
+    width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+    font-size: 0.7rem; font-weight: 700;
+  }
+  .finding .sev.red { background: var(--sev-red-dim); color: var(--sev-red); }
+  .finding .sev.orange { background: var(--sev-orange-dim); color: var(--sev-orange); }
+  .finding .sev.yellow { background: var(--sev-yellow-dim); color: var(--sev-yellow); }
+  .finding .sev.green { background: var(--sev-green-dim); color: var(--sev-green); }
+  .finding .body { display: grid; gap: 2px; }
+  .finding .title { font-size: 0.92rem; font-weight: 600; color: var(--mock-text); }
+  .finding .detail { font-size: 0.8rem; color: var(--mock-text-3); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .finding .tag {
+    font-size: 0.7rem; font-weight: 600; padding: 3px 8px; border-radius: 999px;
+    background: var(--mock-indigo-dim); color: var(--mock-indigo);
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+
+  /* ── Stat strip ── */
+  .stat-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    padding: 28px 28px;
+    background: var(--surface-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    margin: -40px 0 0;
+    position: relative; z-index: 2;
+  }
+  .stat-strip .stat { text-align: center; }
+  .stat-strip .num { font-size: 1.4rem; font-weight: 700; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.01em; }
+  .stat-strip .lbl { font-size: 0.85rem; color: var(--muted); }
+  @media (max-width: 760px) {
+    .stat-strip { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ── Two-column ── */
+  .two-col {
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 64px; align-items: center;
+  }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; gap: 36px; } }
+
+  /* Small feature cards (6-up grid) */
+  .small-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    margin-top: 36px;
+  }
+  @media (max-width: 900px) { .small-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .small-grid { grid-template-columns: 1fr; } }
+  .small-card {
+    padding: 20px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+  }
+  .small-card .icon { width: 32px; height: 32px; border-radius: 8px;
+    background: var(--indigo-softer); color: var(--indigo); display: grid; place-items: center;
+    margin-bottom: 12px;
+  }
+  .small-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+  .small-card p { font-size: 0.9rem; margin-bottom: 0; }
+
+  /* ── FAQ ── */
+  .faq-list { display: grid; gap: 10px; margin-top: 36px; }
+  .faq-item {
+    padding: 18px 22px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    transition: border-color 160ms var(--ease);
+  }
+  .faq-item[open] { border-color: var(--line-strong); }
+  .faq-item summary {
+    cursor: pointer; font-weight: 600; font-size: 1rem; color: var(--ink);
+    list-style: none; display: flex; justify-content: space-between; align-items: center;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: '+'; font-size: 1.4rem; color: var(--muted); font-weight: 400;
+    transition: transform 200ms var(--ease);
+  }
+  .faq-item[open] summary::after { content: '−'; }
+  .faq-item .faq-answer { padding-top: 12px; color: var(--slate); }
+  .faq-item .faq-answer p { margin-bottom: 0; }
+
+  /* ── Install ── */
+  .install-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 36px;
+  }
+  @media (max-width: 900px) { .install-grid { grid-template-columns: 1fr; } }
+  .install-card {
+    padding: 28px;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    position: relative;
+    display: grid; gap: 14px; align-content: start;
+  }
+  .install-card.featured { border-color: var(--indigo); box-shadow: var(--shadow-md); }
+  .install-card .platform {
+    font-size: 0.78rem; font-weight: 600; color: var(--indigo);
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .install-card h3 { font-size: 1.3rem; margin-bottom: 0; }
+  .install-card p { font-size: 0.95rem; }
+  .install-card .footer-meta { font-size: 0.82rem; color: var(--muted); }
+  .terminal {
+    background: var(--mock-bg); color: var(--mock-text);
+    padding: 16px 18px; border-radius: var(--radius);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem; line-height: 1.7; overflow-x: auto;
+    border: 1px solid var(--mock-border);
+  }
+  .terminal .pr { color: var(--mock-text-3); margin-right: 6px; }
+  .terminal .cm { color: var(--mock-indigo); }
+  .terminal .ar { color: var(--purple-light); }
+
+  /* ── Footer ── */
+  .site-footer {
+    padding: 56px 0 32px;
+    background: var(--surface-soft);
+    border-top: 1px solid var(--line);
+  }
+  .site-footer .row {
+    display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px;
+    align-items: start;
+  }
+  @media (max-width: 900px) { .site-footer .row { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .site-footer .row { grid-template-columns: 1fr; } }
+  .brand-foot { display: inline-flex; align-items: center; gap: 10px; }
+  .brand-foot .mark { width: 32px; height: 32px; }
+  .brand-foot .mark img { width: 100%; height: 100%; }
+  .brand-foot .name { font-weight: 700; font-size: 1.05rem; }
+  .site-footer .desc { color: var(--muted); font-size: 0.9rem; max-width: 36ch; margin-top: 8px; }
+  .site-footer h5 { font-size: 0.85rem; font-weight: 600; color: var(--ink); margin-bottom: 12px; letter-spacing: 0.02em; }
+  .site-footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .site-footer ul a { color: var(--slate); font-size: 0.92rem; }
+  .site-footer ul a:hover { color: var(--ink); }
+  .credit {
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    padding-top: 28px; margin-top: 28px;
+    border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 0.85rem;
+  }
+
+  /* ── Mobile tweaks ── */
+  @media (max-width: 560px) {
+    section { padding: 64px 0; }
+    .btn { min-height: 44px; }
+    .theme-toggle { width: 44px; height: 44px; }
+    nav.topnav ul.links a { padding: 10px 0; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- ====================== NAV ====================== -->
+<nav class="topnav" aria-label="Primary">
+  <div class="container row">
+    <a href="#" class="brand-lockup" aria-label="privacycommand home">
+      <span class="mark" aria-hidden="true">
+        <img src="assets/brand/privacycommand-icon.svg" alt="" />
+      </span>
+      <span class="name">privacy<span class="accent">command</span></span>
+      <span class="beta-chip beta-chip-nav" aria-label="Currently in beta">
+        <span class="beta-dot" aria-hidden="true"></span>
+        Beta
+      </span>
+    </a>
+    <ul class="links" role="list">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="#install">Install</a></li>
+    </ul>
+    <span style="display:inline-flex;align-items:center;gap:6px;">
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to dark theme" aria-pressed="false">
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/>
+        </svg>
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" fill="currentColor"/>
+          <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <a href="#install" class="btn btn-primary" aria-label="Download privacycommand">
+        Download
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M7 1.5v8M3.5 6L7 9.5 10.5 6M2 12.5h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </span>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- ====================== HERO ====================== -->
+<header class="hero" aria-labelledby="hero-title">
+  <div class="container">
+    <span class="eyebrow reveal">A privacykey project</span>
+    <h1 id="hero-title" class="reveal delay-1">Drop an app. <span class="accent">See everything it touches.</span></h1>
+    <p class="lede reveal delay-2">privacycommand is a forensic permission auditor for macOS. Drag a <code>.app</code> bundle onto it and get the whole story — every entitlement, signed identity, hard-coded domain, embedded SDK, login item, and live file or network event. Built so IT and security teams can review a vendor app in minutes, not afternoons.</p>
+    <div class="cta-row reveal delay-3">
+      <a href="#install" class="btn btn-primary btn-lg">
+        Download for Mac
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M7 1.5v8M3.5 6L7 9.5 10.5 6M2 12.5h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#features" class="btn btn-ghost btn-lg">See what it finds</a>
+      <a href="https://github.com/privacykey/privacycommand/releases" rel="noopener"
+         class="beta-chip" aria-label="Currently in beta — view release notes on GitHub">
+        <span class="beta-dot" aria-hidden="true"></span>
+        Beta
+        <span class="version-num" data-version>v0.1.5</span>
+      </a>
+      <span class="cta-meta">Free · MIT · macOS 13+ · in active development</span>
+    </div>
+
+    <!-- Hero device — Dashboard mock window -->
+    <div class="hero-stage reveal delay-4">
+      <div class="mock-window" id="heroDevice" aria-label="privacycommand dashboard preview">
+        <div class="mock-titlebar">
+          <span class="dot r" aria-hidden="true"></span>
+          <span class="dot y" aria-hidden="true"></span>
+          <span class="dot g" aria-hidden="true"></span>
+          <span class="title">privacycommand — Dashboard</span>
+        </div>
+        <div class="mock-canvas">
+          <div class="mock-nav" role="tablist" aria-label="Dashboard tabs">
+            <span class="logo" aria-hidden="true"><img src="assets/brand/privacycommand-icon.svg" alt="" /></span>
+            <span class="name">privacycommand</span>
+            <span class="tabs">
+              <button class="tab active" type="button" role="tab" aria-selected="true" aria-controls="panel-dashboard" data-panel="dashboard">Dashboard</button>
+              <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-static" data-panel="static">Static</button>
+              <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-telemetry" data-panel="telemetry">Telemetry</button>
+              <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-network" data-panel="network">Network</button>
+              <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-monitoring" data-panel="monitoring">Monitoring</button>
+            </span>
+            <span class="right">
+              <span style="font-size:0.78rem;">SampleApp.app</span>
+            </span>
+          </div>
+          <div class="mock-body">
+
+            <!-- ── Dashboard panel ── -->
+            <div class="mock-panel is-active" id="panel-dashboard" role="tabpanel" aria-labelledby="tab-dashboard" data-panel="dashboard">
+              <div class="drop-zone" aria-hidden="true">
+                <strong>Drop a .app bundle anywhere on this window</strong>
+                <span class="hint">Static report runs in seconds. Live monitoring is opt-in.</span>
+              </div>
+              <div class="findings">
+                <article class="finding">
+                  <span class="sev red" aria-label="High severity">!</span>
+                  <div class="body">
+                    <span class="title">Hardened Runtime disabled</span>
+                    <span class="detail">com.apple.security.cs.allow-unsigned-executable-memory = true</span>
+                  </div>
+                  <span class="tag">Static</span>
+                </article>
+                <article class="finding">
+                  <span class="sev orange" aria-label="Medium severity">●</span>
+                  <div class="body">
+                    <span class="title">7 analytics SDKs detected</span>
+                    <span class="detail">Firebase · Mixpanel · AppsFlyer · Amplitude · Segment · Sentry · LaunchDarkly</span>
+                  </div>
+                  <span class="tag">Telemetry</span>
+                </article>
+                <article class="finding">
+                  <span class="sev orange" aria-label="Medium severity">●</span>
+                  <div class="body">
+                    <span class="title">Privacy Manifest mismatch</span>
+                    <span class="detail">Binary uses NSUserDefaults but manifest does not declare CA92.1 reason</span>
+                  </div>
+                  <span class="tag">Manifest</span>
+                </article>
+                <article class="finding">
+                  <span class="sev yellow" aria-label="Low severity">●</span>
+                  <div class="body">
+                    <span class="title">2 launch agents registered</span>
+                    <span class="detail">~/Library/LaunchAgents/com.example.helper.plist + 1 more</span>
+                  </div>
+                  <span class="tag">Background</span>
+                </article>
+                <article class="finding">
+                  <span class="sev green" aria-label="Pass">✓</span>
+                  <div class="body">
+                    <span class="title">Notarized · stapler valid</span>
+                    <span class="detail">Developer ID: Example Corp (TEAMID12345) · spctl assessment passed</span>
+                  </div>
+                  <span class="tag">Signing</span>
+                </article>
+              </div>
+            </div>
+
+            <!-- ── Static panel ── -->
+            <div class="mock-panel" id="panel-static" role="tabpanel" aria-labelledby="tab-static" data-panel="static" hidden>
+              <h4 class="mock-section-title">Bundle integrity</h4>
+              <div class="static-rows" style="margin-bottom: 14px;">
+                <div class="static-row">
+                  <div>
+                    <div class="lbl">Code signing</div>
+                    <div class="det">Developer ID Application: Example Corp (TEAMID12345)</div>
+                  </div>
+                  <span class="pill green">Valid</span>
+                </div>
+                <div class="static-row">
+                  <div>
+                    <div class="lbl">Notarization</div>
+                    <div class="det">stapler · spctl · SHA-256 stored</div>
+                  </div>
+                  <span class="pill green">Stapled</span>
+                </div>
+                <div class="static-row">
+                  <div>
+                    <div class="lbl">Hardened runtime</div>
+                    <div class="det">allow-unsigned-executable-memory · disable-library-validation</div>
+                  </div>
+                  <span class="pill red">2 relaxed</span>
+                </div>
+              </div>
+              <h4 class="mock-section-title">Hard-coded surface</h4>
+              <div class="static-rows">
+                <div class="static-row">
+                  <div>
+                    <div class="lbl">Domains</div>
+                    <div class="det">api.example.com · firebaseio.com · mixpanel.com · cdn.appsflyer.com · 10 more</div>
+                  </div>
+                  <span class="pill orange">14 found</span>
+                </div>
+                <div class="static-row">
+                  <div>
+                    <div class="lbl">Embedded helpers</div>
+                    <div class="det">com.example.helper.plist · com.example.updater.plist</div>
+                  </div>
+                  <span class="pill yellow">2 agents</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Telemetry panel ── -->
+            <div class="mock-panel" id="panel-telemetry" role="tabpanel" aria-labelledby="tab-telemetry" data-panel="telemetry" hidden>
+              <div class="telemetry-summary">
+                <div class="telemetry-count">
+                  7
+                  <span class="lbl">SDKs detected</span>
+                </div>
+                <div class="telemetry-bars">
+                  <div class="telemetry-bar">
+                    <span class="name">Analytics</span>
+                    <span class="track"><span class="fill" style="width:80%;background:var(--sev-orange);"></span></span>
+                    <span class="num">4</span>
+                  </div>
+                  <div class="telemetry-bar">
+                    <span class="name">Attribution</span>
+                    <span class="track"><span class="fill" style="width:40%;background:var(--sev-yellow);"></span></span>
+                    <span class="num">2</span>
+                  </div>
+                  <div class="telemetry-bar">
+                    <span class="name">Crash / errors</span>
+                    <span class="track"><span class="fill" style="width:20%;background:var(--mock-indigo);"></span></span>
+                    <span class="num">1</span>
+                  </div>
+                  <div class="telemetry-bar">
+                    <span class="name">Advertising</span>
+                    <span class="track"><span class="fill" style="width:0%;background:var(--sev-green);"></span></span>
+                    <span class="num">0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="telemetry-list">
+                <div class="telemetry-row">
+                  <span class="sdk">Firebase Analytics</span>
+                  <span class="cat">Analytics</span>
+                  <span class="src">FIRAnalyticsConfiguration</span>
+                </div>
+                <div class="telemetry-row">
+                  <span class="sdk">Mixpanel</span>
+                  <span class="cat">Analytics</span>
+                  <span class="src">MPNetworkRequest</span>
+                </div>
+                <div class="telemetry-row">
+                  <span class="sdk">Amplitude</span>
+                  <span class="cat">Analytics</span>
+                  <span class="src">AMPDeviceInfo</span>
+                </div>
+                <div class="telemetry-row">
+                  <span class="sdk">Segment</span>
+                  <span class="cat">Analytics</span>
+                  <span class="src">SEGAnalytics</span>
+                </div>
+                <div class="telemetry-row">
+                  <span class="sdk">AppsFlyer</span>
+                  <span class="cat">Attribution</span>
+                  <span class="src">AppsFlyerLib</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Network panel ── -->
+            <div class="mock-panel" id="panel-network" role="tabpanel" aria-labelledby="tab-network" data-panel="network" hidden>
+              <div class="net-toolbar">
+                <span class="label"><strong>14</strong> destinations · <strong>1.4 MB</strong> sent · <strong>3.8 MB</strong> received</span>
+                <span class="kill-switch" role="status">Kill switch armed</span>
+              </div>
+              <div class="net-list">
+                <div class="net-row">
+                  <span class="verb">TLS</span>
+                  <span><span class="host">api.example.com</span> <span class="ip">· 23.45.67.89</span></span>
+                  <span class="bytes">218 KB ↑</span>
+                  <span class="bytes">1.1 MB ↓</span>
+                </div>
+                <div class="net-row">
+                  <span class="verb">TLS</span>
+                  <span><span class="host">firebaseinstallations.googleapis.com</span> <span class="ip">· 142.250.80.106</span></span>
+                  <span class="bytes">94 KB ↑</span>
+                  <span class="bytes">312 KB ↓</span>
+                </div>
+                <div class="net-row">
+                  <span class="verb">TLS</span>
+                  <span><span class="host">api.mixpanel.com</span> <span class="ip">· 18.221.13.84</span></span>
+                  <span class="bytes">62 KB ↑</span>
+                  <span class="bytes">8 KB ↓</span>
+                </div>
+                <div class="net-row">
+                  <span class="verb">TLS</span>
+                  <span><span class="host">api2.amplitude.com</span> <span class="ip">· 35.244.214.98</span></span>
+                  <span class="bytes">41 KB ↑</span>
+                  <span class="bytes">6 KB ↓</span>
+                </div>
+                <div class="net-row">
+                  <span class="verb">DNS</span>
+                  <span><span class="host">cdn.appsflyer.com</span> <span class="ip">· dns.google</span></span>
+                  <span class="bytes">—</span>
+                  <span class="bytes">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Monitoring panel ── -->
+            <div class="mock-panel" id="panel-monitoring" role="tabpanel" aria-labelledby="tab-monitoring" data-panel="monitoring" hidden>
+              <h4 class="mock-section-title">Live event stream · fs_usage + NetworkExtension</h4>
+              <div class="stream" aria-label="Sample of live file and network events">
+                <div><span class="ts">14:02:11.318</span><span class="op read">READ</span><span class="path">~/Library/Application Support/SampleApp/config.json</span> <span class="pid">pid 4821</span></div>
+                <div><span class="ts">14:02:11.412</span><span class="op exec">EXEC</span><span class="path">/Library/LaunchAgents/com.example.helper</span> <span class="pid">→ pid 4844</span></div>
+                <div><span class="ts">14:02:11.501</span><span class="op write">WRITE</span><span class="path">~/Library/Caches/SampleApp/session.dat</span> <span class="pid">pid 4821</span></div>
+                <div><span class="ts">14:02:11.612</span><span class="op net">NET</span><span class="path">api.example.com:443 → TLS handshake</span> <span class="pid">pid 4821</span></div>
+                <div><span class="ts">14:02:11.844</span><span class="op read">READ</span><span class="path">/private/etc/hosts</span> <span class="pid">pid 4821</span></div>
+                <div><span class="ts">14:02:11.901</span><span class="op net">NET</span><span class="path">firebaseinstallations.googleapis.com:443</span> <span class="pid">pid 4821</span></div>
+                <div><span class="ts">14:02:12.044</span><span class="op write">WRITE</span><span class="path">~/Library/Preferences/com.example.SampleApp.plist</span> <span class="pid">pid 4821</span></div>
+                <div><span class="ts">14:02:12.218</span><span class="op net">NET</span><span class="path">api.mixpanel.com:443</span> <span class="pid">pid 4821</span></div>
+                <div><span class="ts">14:02:12.401</span><span class="op read">READ</span><span class="path">~/Library/Cookies/Cookies.binarycookies</span> <span class="pid">pid 4821</span></div>
+                <div><span class="ts">14:02:12.512</span><span class="op exec">EXEC</span><span class="path">/usr/bin/security find-generic-password</span> <span class="pid">→ pid 4901</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ====================== STAT STRIP ====================== -->
+<section class="tight" aria-label="Project facts">
+  <div class="container">
+    <div class="stat-strip reveal">
+      <div class="stat"><div class="num"><span class="accent">Free</span></div><div class="lbl">MIT, no upsell</div></div>
+      <div class="stat"><div class="num">Local</div><div class="lbl">Analysis stays on your Mac</div></div>
+      <div class="stat"><div class="num">No <span style="font-size:.65em;color:var(--muted);">telemetry</span></div><div class="lbl">Zero analytics SDKs</div></div>
+      <div class="stat"><div class="num">29</div><div class="lbl">Static detectors built in</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== WHY ====================== -->
+<section class="bg-soft" id="why">
+  <div class="container">
+    <div class="two-col">
+      <div class="reveal">
+        <span class="kicker">The gap</span>
+        <h2>Permissions tell you what an app <em>can</em> do. <span class="accent">Not what it does.</span></h2>
+        <p>macOS shows you the prompts. The App Store shows you what a developer <em>says</em> they collect. Neither tells you what's actually inside the binary you just installed — the hard-coded analytics endpoints, the embedded ad SDK, the launch agent that survives reboots, the file paths the app touches the moment you open it.</p>
+        <p>privacycommand reads what's actually there. Static signals from the bundle. Live signals from a real run. The developer's declared Privacy Manifest cross-checked against both. One report, in plain English, exportable as JSON, HTML, or PDF.</p>
+      </div>
+      <div class="reveal delay-1" aria-hidden="true">
+        <div class="mock-window lifted">
+          <div class="mock-titlebar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="title">Privacy Manifest cross-check</span>
+          </div>
+          <div class="mock-body" style="padding: 22px;">
+            <div style="display:grid;gap:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.82rem;">
+              <div style="color:var(--mock-text-2);">DECLARED in PrivacyInfo.xcprivacy</div>
+              <div style="color:var(--mock-text);">  NSPrivacyAccessedAPICategoryUserDefaults · CA92.1</div>
+              <div style="color:var(--mock-text);">  NSPrivacyAccessedAPICategoryFileTimestamp · DDA9.1</div>
+              <div style="color:var(--mock-text-3);margin-top:8px;">USED in binary</div>
+              <div style="color:var(--mock-text);">  NSUserDefaults<span style="color:var(--sev-green);"> ✓ matched</span></div>
+              <div style="color:var(--mock-text);">  stat / fstat<span style="color:var(--sev-green);"> ✓ matched</span></div>
+              <div style="color:var(--mock-text);">  systemInfoFor<span style="color:var(--sev-red);"> ✗ undeclared (CB73.1)</span></div>
+              <div style="color:var(--mock-text);">  diskSpaceAvailable<span style="color:var(--sev-red);"> ✗ undeclared (E174.1)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== FEATURES (6-up grid) ====================== -->
+<section id="features">
+  <div class="container">
+    <span class="kicker reveal">Built into the same drop</span>
+    <h2 class="reveal delay-1">Everything you'd reach for, <span class="accent">in one window.</span></h2>
+
+    <div class="small-grid">
+      <article class="small-card reveal">
+        <div class="icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <h3>Watch an app live</h3>
+        <p>Network destinations, file events, child processes, and resource usage all stream into one view. A heat-graded callout fires the moment something spikes — a burst of disk writes, a fresh outbound host, a CPU climb that wasn't there a second ago.</p>
+      </article>
+      <article class="small-card reveal delay-1">
+        <div class="icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <h3>Check an update before it lands</h3>
+        <p>Drop in a candidate update and diff it against the version on disk. For Sparkle-distributed apps, privacycommand reads the appcast itself and pulls the next release straight into the inspector — so the audit happens before the live app's auto-updater ever sees it. The History tab does the same for any two saved reports: added and removed entitlements, domains, SDKs and login items are colour-cued, with a show-only-changes toggle.</p>
+      </article>
+      <article class="small-card reveal delay-2">
+        <div class="icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <h3>Links to common tools</h3>
+        <p>Every finding shows the underlying command — <code>codesign</code>, <code>otool</code>, <code>plutil</code>, <code>fs_usage</code>, <code>sfltool</code>, <code>lsof</code>, <code>mdls</code> — copy-able with one click. Quick-launch into Suspicious Package, Hopper, or your own preferred tool when you want to dig deeper.</p>
+      </article>
+      <article class="small-card reveal">
+        <div class="icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3>VM mode</h3>
+        <p>For apps you'd rather not run on bare metal, ship a guest agent into a macOS VM (VirtualBuddy, UTM, Parallels) and stream observations back to the host across the VM boundary. Same analyzer, isolated host.</p>
+      </article>
+      <article class="small-card reveal delay-1">
+        <div class="icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>
+        </div>
+        <h3>Telemetry callout</h3>
+        <p>Heat-graded count of analytics, advertising, and attribution SDKs in the bundle, with the per-category breakdown and the matched Mach-O strings behind every detection. Hover any SDK to see exactly what fingerprinted it.</p>
+      </article>
+      <article class="small-card reveal delay-2">
+        <div class="icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <h3>Codesign &amp; notarisation</h3>
+        <p>Full chain validation — Developer ID, Team ID, hardened-runtime flags, stapled notarization ticket, SHA-256 of the bundle, <code>spctl</code> assessment. Every relaxation flagged with the entitlement key behind it.</p>
+      </article>
+      <article class="small-card reveal">
+        <div class="icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <h3>Batch scan a whole fleet</h3>
+        <p>Point privacycommand at a folder — or all of <code>/Applications</code> — and triage every app at once in a sortable, filterable table: risk tier, warning and error counts, and the headline signals for each. The same analyzer runs on every bundle. One click opens any row in the main window for the full deep-dive.</p>
+      </article>
+      <article class="small-card reveal delay-1">
+        <div class="icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h3>Decompile the call site</h3>
+        <p>The binary summary maps every function that can open a connection — BSD sockets, <code>getaddrinfo</code>, CFNetwork, Network.framework — with any host or URL literal sitting beside it. Decompile any call site on demand if you have Ghidra installed. For relaunchable apps without hardened runtime, capture a live call stack that ties a real outbound connection back to the function that opened it.</p>
+      </article>
+      <article class="small-card reveal delay-2">
+        <div class="icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        </div>
+        <h3>Claims vs. binary</h3>
+        <p>When the bundle came from the Mac App Store, privacycommand pulls the developer's declared Privacy Nutrition Labels from Apple and sets them beside its own static-analysis findings — so you can see for yourself whether what they say they collect matches what the binary actually reaches for.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== FAQ ====================== -->
+<section id="faq">
+  <div class="container">
+    <span class="kicker reveal">FAQ</span>
+    <h2 class="reveal delay-1">The questions <span class="accent">that come up first.</span></h2>
+
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Is privacycommand really free?</summary>
+        <div class="faq-answer">
+          <p>Yes. Free and open-source under the MIT licence. No accounts, no subscriptions, no upsells. The full source is on <a href="https://github.com/privacykey/privacycommand" rel="noopener">GitHub</a> for anyone to read or fork.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Does privacycommand need admin / root access?</summary>
+        <div class="faq-answer">
+          <p>No, not for the core report. Static analysis, App Store privacy-label cross-check, and the Background Task Management audit run unprivileged. The optional helper unlocks live file-event monitoring (<code>fs_usage</code>) and the network kill switch (<code>pf</code> anchor) — installing it asks for admin once, after which it stays out of your way.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Does privacycommand send anything anywhere?</summary>
+        <div class="faq-answer">
+          <p>All analysis runs locally. The app makes three explicit, bounded network calls: DNS reverse lookups for destinations the inspected app contacts (so the Network tab can label <code>8.8.8.8</code> as <code>dns.google</code>), Mac App Store privacy-label lookups against <code>itunes.apple.com</code> keyed on the inspected app's bundle ID, and the Sparkle appcast fetch when you check for updates. The inspected app's contents never leave your machine.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Is it a malware sandbox?</summary>
+        <div class="faq-answer">
+          <p>Not exactly. privacycommand is a forensic auditor — it tells you what an app contains and what it does on a normal run. For risky apps you'd rather not run on bare metal, VM mode lets you ship the same analysis into a macOS VM (VirtualBuddy, UTM, Parallels) and stream observations back. It's adjacent to a sandbox; it's optimised for transparency rather than detonation.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Apple Silicon, Intel, both?</summary>
+        <div class="faq-answer">
+          <p>Both. The DMG is a universal binary signed and notarized for macOS 13 (Ventura) and later. The Homebrew cask resolves to the same artefact.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>What kinds of apps can I drop on it?</summary>
+        <div class="faq-answer">
+          <p>Any <code>.app</code> bundle, plus <code>.dmg</code> installers — privacycommand will mount and inspect the bundle inside. Mac App Store apps, Developer ID apps, Catalyst, Electron, Tauri, Java-on-mac wrappers, command-line apps wrapped as <code>.app</code> — they all parse. Apps without a bundle (raw command-line binaries) are out of scope today.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>What does it find that I couldn't find by hand?</summary>
+        <div class="faq-answer">
+          <p>The same things you could find with <code>codesign</code>, <code>otool</code>, <code>plutil</code>, <code>fs_usage</code>, <code>sfltool</code>, and a stack of <code>grep</code> — except cross-referenced and explained. The point is consistency: privacycommand runs every detector against every drop, in the same shape, and explains every finding in plain English so the report is shareable with someone who isn't a binary-analysis nerd.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Can I export reports for a ticket or a vendor review?</summary>
+        <div class="faq-answer">
+          <p>Yes — every audit exports as JSON, HTML, or PDF. The HTML and PDF exports are designed to read like an IT vendor-review one-pager; the JSON keeps every detector's raw output for downstream tooling.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== INSTALL ====================== -->
+<section id="install" class="bg-soft">
+  <div class="container">
+    <span class="kicker reveal">Install</span>
+    <h2 class="reveal delay-1">Pick the way <span class="accent">that fits your fleet.</span></h2>
+    <p class="lede reveal delay-2">All three install the same signed, notarized binary. Pick whichever fits how you already manage Mac software.</p>
+
+    <div class="install-grid">
+      <article class="install-card featured reveal" aria-labelledby="install-brew">
+        <div class="platform">Recommended</div>
+        <h3 id="install-brew">Homebrew tap</h3>
+        <p>The way most teams already install Mac software. <code>brew upgrade --cask privacycommand</code> keeps it current; privacycommand notices it's running from a Homebrew Caskroom and disables in-app updates so brew stays in charge.</p>
+        <div class="terminal" role="img" aria-label="brew install privacykey/tap/privacycommand">
+          <div><span class="pr">$</span> <span class="cm">brew install</span> <span class="ar">privacykey/tap/privacycommand</span></div>
+        </div>
+        <a href="https://github.com/privacykey/homebrew-tap" class="btn btn-ghost" rel="noopener">Tap details</a>
+        <div class="footer-meta">Updates with <code>brew upgrade</code></div>
+      </article>
+
+      <article class="install-card reveal delay-1" aria-labelledby="install-dmg">
+        <div class="platform">Direct download</div>
+        <h3 id="install-dmg">Signed DMG</h3>
+        <p>The signed and notarized <code>.dmg</code> from the latest GitHub release. Drag the app into <code>/Applications</code>, you're done. In-app updates ship via Sparkle 2 — auto-checks are <em>off by default</em>, you opt in via Settings → Updates.</p>
+        <a href="https://github.com/privacykey/privacycommand/releases/latest" class="btn btn-primary btn-lg" rel="noopener">
+          Download .dmg
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M7 1.5v8M3.5 6L7 9.5 10.5 6M2 12.5h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <div class="footer-meta">Universal binary · Apple Silicon &amp; Intel · macOS 13+</div>
+      </article>
+
+      <article class="install-card reveal delay-2" aria-labelledby="install-source">
+        <div class="platform">For tinkerers</div>
+        <h3 id="install-source">Build from source</h3>
+        <p>Open the Xcode project or build the SPM target directly. The pure-Swift analyzer is AppKit-free — you can drive it from the CLI (<code>auditctl</code>) or wrap it in your own tooling.</p>
+        <div class="terminal" role="img" aria-label="git clone privacykey privacycommand, then swift build">
+          <div><span class="pr">$</span> <span class="cm">git clone</span> <span class="ar">github.com/privacykey/privacycommand</span></div>
+          <div><span class="pr">$</span> <span class="cm">cd</span> <span class="ar">privacycommand/privacycommand</span></div>
+          <div><span class="pr">$</span> <span class="cm">swift build</span></div>
+        </div>
+        <a href="https://github.com/privacykey/privacycommand#build-from-source" class="btn btn-ghost" rel="noopener">Build guide</a>
+        <div class="footer-meta">Swift 5.9 · Xcode or SPM</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ====================== FOOTER ====================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="brand-foot">
+          <span class="mark" aria-hidden="true"><img src="assets/brand/privacycommand-icon.svg" alt="" /></span>
+          <span class="name">privacy<span class="accent">command</span></span>
+        </div>
+        <p class="desc">A privacykey project. Free, open-source, built so IT and DFIR teams can answer one question quickly: <em>what does this app actually do?</em></p>
+      </div>
+      <div>
+        <h5>Product</h5>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#install">Install</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>About this site</h5>
+        <ul>
+          <li><a href="about.html">About privacykey</a></li>
+          <li><a href="privacy.html">Privacy policy</a></li>
+          <li><a href="legal.html">Legal &amp; licences</a></li>
+          <li><a href="/.well-known/security.txt" rel="noopener">security.txt</a></li>
+          <li><a href="/llms.txt" rel="noopener">llms.txt</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Source &amp; community</h5>
+        <ul>
+          <li><a href="https://github.com/privacykey/privacycommand" rel="noopener">Source code</a></li>
+          <li><a href="https://github.com/privacykey/privacycommand/releases/latest" rel="noopener">Latest release</a></li>
+          <li><a href="https://github.com/privacykey/privacycommand/blob/main/LICENSE" rel="noopener">License (MIT)</a></li>
+          <li><a href="https://github.com/privacykey/privacycommand/blob/main/SECURITY.md" rel="noopener">Report a security issue</a></li>
+          <li><a href="https://github.com/privacykey/privacytracker" rel="noopener">Sibling: privacytracker</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="credit">
+      <div>© 2026 privacykey. privacycommand is free and open-source software.</div>
+      <div>Made for the people who ask <em>what does this app actually do?</em></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ============================================================
+  //  Live version — fetches the latest release tag from GitHub,
+  //  caches it for an hour in sessionStorage, populates every
+  //  [data-version] slot. Falls back silently to the placeholder
+  //  if there are no releases yet, the API rate-limits us, or the
+  //  network is unreachable.
+  // ============================================================
+  (function () {
+    var CACHE_KEY = 'pc-version';
+    var CACHE_TTL = 60 * 60 * 1000; // 1h
+    var REPO = 'privacykey/privacycommand';
+
+    function applyVersion (v) {
+      if (!v) return;
+      document.querySelectorAll('[data-version]').forEach(function (el) {
+        el.textContent = v;
+      });
+    }
+
+    function readCache () {
+      try {
+        var raw = sessionStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        var p = JSON.parse(raw);
+        if (!p || !p.v || !p.t) return null;
+        if (Date.now() - p.t > CACHE_TTL) return null;
+        return p.v;
+      } catch (e) { return null; }
+    }
+    function writeCache (v) {
+      try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ v: v, t: Date.now() })); }
+      catch (e) {}
+    }
+
+    var cached = readCache();
+    if (cached) { applyVersion(cached); return; }
+
+    if (!('fetch' in window)) return;
+
+    fetch('https://api.github.com/repos/' + REPO + '/releases/latest', {
+      headers: { 'Accept': 'application/vnd.github+json' }
+    })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function (data) {
+        var v = data && data.tag_name;
+        if (v) { applyVersion(v); writeCache(v); }
+      })
+      .catch(function () { /* leave the placeholder alone */ });
+  })();
+
+  // ============================================================
+  //  Theme management
+  // ============================================================
+  (function () {
+    var STORAGE_KEY = 'pc-theme';
+    var html = document.documentElement;
+    var body = document.body;
+    var btn = document.getElementById('themeToggle');
+    var mql = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function resolved () {
+      var explicit = html.getAttribute('data-theme');
+      if (explicit === 'dark' || explicit === 'light') return explicit;
+      return mql.matches ? 'dark' : 'light';
+    }
+    function syncBodyClass () {
+      if (resolved() === 'dark') body.classList.add('theme-dark');
+      else body.classList.remove('theme-dark');
+      if (btn) {
+        var isDark = resolved() === 'dark';
+        btn.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
+        btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+      }
+    }
+    syncBodyClass();
+    if (mql.addEventListener) {
+      mql.addEventListener('change', function () {
+        if (!html.getAttribute('data-theme')) syncBodyClass();
+      });
+    }
+    if (btn) {
+      btn.addEventListener('click', function () {
+        var next = resolved() === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+        syncBodyClass();
+      });
+    }
+  })();
+
+  // ============================================================
+  //  Reveal-on-scroll
+  // ============================================================
+  (function () {
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
+      var device = document.getElementById('heroDevice');
+      if (device) device.classList.add('lifted');
+      return;
+    }
+    var revealObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+    document.querySelectorAll('.reveal').forEach(function (el) { revealObs.observe(el); });
+    var device = document.getElementById('heroDevice');
+    if (device) {
+      window.addEventListener('load', function () {
+        setTimeout(function () { device.classList.add('lifted'); }, 250);
+      });
+    }
+  })();
+
+  // ============================================================
+  //  Sticky nav background
+  // ============================================================
+  (function () {
+    var nav = document.querySelector('nav.topnav');
+    function onScroll () {
+      if (window.scrollY > 12) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // ============================================================
+  //  Hero — tabs swap the visible mock panel
+  // ============================================================
+  (function () {
+    var tabs = document.querySelectorAll('.mock-nav .tab');
+    var panels = document.querySelectorAll('.mock-window .mock-panel');
+    if (!tabs.length || !panels.length) return;
+
+    function activate (key) {
+      tabs.forEach(function (t) {
+        var on = t.getAttribute('data-panel') === key;
+        t.classList.toggle('active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      panels.forEach(function (p) {
+        var on = p.getAttribute('data-panel') === key;
+        p.classList.toggle('is-active', on);
+        if (on) { p.removeAttribute('hidden'); }
+        else    { p.setAttribute('hidden', ''); }
+      });
+    }
+
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        var key = t.getAttribute('data-panel');
+        if (key) activate(key);
+      });
+    });
+
+    // Keyboard navigation between tabs (left/right arrows)
+    tabs.forEach(function (t, i) {
+      t.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        e.preventDefault();
+        var dir = e.key === 'ArrowRight' ? 1 : -1;
+        var next = tabs[(i + dir + tabs.length) % tabs.length];
+        next.focus();
+        var key = next.getAttribute('data-panel');
+        if (key) activate(key);
+      });
+    });
+  })();
+
+  // ============================================================
+  //  Smooth-scroll for in-page anchors
+  // ============================================================
+  (function () {
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var id = a.getAttribute('href').slice(1);
+        if (!id) return;
+        var target = document.getElementById(id);
+        if (!target) return;
+        e.preventDefault();
+        var top = target.getBoundingClientRect().top + window.scrollY - 60;
+        window.scrollTo({ top: top, behavior: prefersReduced ? 'auto' : 'smooth' });
+        target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+      });
+    });
+  })();
+</script>
+</body>
+</html>

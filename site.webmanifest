@@ -1,0 +1,15 @@
+{
+  "name": "privacycommand",
+  "short_name": "privacycommand",
+  "description": "Drop a .app and see everything it touches — a free, open-source macOS forensic auditor.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a18",
+  "theme_color": "#0a0a18",
+  "icons": [
+    { "src": "assets/brand/privacycommand-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "assets/brand/privacycommand-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
