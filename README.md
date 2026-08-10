@@ -2,7 +2,14 @@
 
 Marketing site for [privacycommand](https://github.com/privacykey/privacycommand) — the macOS forensic permission auditor in the privacykey family. Scaffolded from the privacytracker site so the two products feel like part of the same family.
 
-Single-file static site. No framework, no build step. Drop the folder onto any static host (Netlify, Cloudflare Pages, GitHub Pages, S3 + CloudFront).
+Static HTML. No framework, no build step. Point any static host at the
+repository root (Netlify, Cloudflare Pages, GitHub Pages, S3 + CloudFront).
+
+**Hostname:** `privacycommand.privacykey.org` *(DNS not configured yet)*
+
+Full product documentation lives separately, at
+[docs-privacycommand](https://github.com/privacykey/docs-privacycommand) →
+`docs.privacycommand.privacykey.org`. Keep feature claims here in step with it.
 
 ## Layout
 
@@ -41,7 +48,6 @@ Single-file static site. No framework, no build step. Drop the folder onto any s
 Anything that serves files works:
 
 ```sh
-cd "privacycommand website"
 python3 -m http.server 4000
 # open http://localhost:4000
 ```
@@ -55,7 +61,7 @@ python3 -m http.server 4000
 3. **Domain** — every canonical URL and OG tag points at `https://privacycommand.privacykey.org/`. Change the host if you ship under a different domain.
 4. **`security.txt` `Expires`** — bump the date once a year.
 5. **`sitemap.xml` `lastmod`** — bump on material changes.
-6. **`docs/RELEASES.md` link** referenced in `legal.html` — confirm it resolves once the doc is in the repo.
+6. **`docs/RELEASES.md` link** referenced in `legal.html` — that file does not exist in the privacycommand repo and never has. Point it at the release workflow instead: [`.github/workflows/release.yml`](https://github.com/privacykey/privacycommand/blob/main/.github/workflows/release.yml), which calls the shared pipeline in [privacykey/gh-workflows](https://github.com/privacykey/gh-workflows).
 
 ## Privacy posture (mirrored from the app)
 
