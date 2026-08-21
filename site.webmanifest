@@ -6,8 +6,8 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0a0a18",
-  "theme_color": "#0a0a18",
+  "background_color": "#0B0B12",
+  "theme_color": "#0B0B12",
   "icons": [
     { "src": "assets/brand/privacycommand-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
     { "src": "assets/brand/privacycommand-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
