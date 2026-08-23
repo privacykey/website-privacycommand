@@ -24,7 +24,6 @@
 <meta property="og:description" content="The data posture of privacycommand, in plain English." />
 <meta property="og:url" content="https://privacycommand.privacykey.org/privacy.html" />
 
-<link rel="alternate" type="text/markdown" title="llms.txt" href="/llms.txt" />
 <link rel="preload" href="assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
 
 <script>
@@ -219,19 +218,19 @@
     <div class="summary-box">
       <h2>The short version</h2>
       <ul>
-        <li><strong>No analytics.</strong> privacycommand ships zero analytics, advertising, or attribution SDKs. There is no telemetry endpoint, no install counter, no crash-report bucket.</li>
+        <li><strong>No analytics.</strong> privacycommand ships zero analytics, advertising, or attribution SDKs. There is no telemetry endpoint, install counter, or crash-report bucket.</li>
         <li><strong>All analysis is local.</strong> The inspected app's contents never leave your machine.</li>
         <li><strong>Outbound calls are explicit and bounded.</strong> See the table below for every endpoint the app may contact.</li>
-        <li><strong>The privileged helper is opt-in.</strong> Without it, the app still works — file-event monitoring is unavailable and the network kill switch is disabled.</li>
+        <li><strong>The privileged helper is opt-in.</strong> Without it, the app still works, but file-event monitoring is unavailable and the network kill switch is disabled.</li>
         <li><strong>Open source under MIT.</strong> Read the code, fork it, run it offline.</li>
       </ul>
     </div>
 
     <h2>What we collect</h2>
-    <p>Nothing. privacycommand has no server. There is no account to create, no email to register, no licence key to validate. The maintainers have no way to know that you've installed the app, let alone what you've used it to inspect.</p>
+    <p>Nothing. privacycommand has no server. There is no account to create, email to register, or licence key to validate. The maintainers have no way to know that you've installed the app, let alone what you've used it to inspect.</p>
 
     <h2>Every outbound endpoint the app may contact</h2>
-    <p>privacycommand makes three categories of network call. Each is bounded, each is opt-out-able, and each is documented here.</p>
+    <p>privacycommand makes three categories of network call. Each one is bounded, can be switched off, and is documented here.</p>
 
     <table>
       <thead>
@@ -241,24 +240,24 @@
         <tr>
           <td><code>itunes.apple.com</code><br><code>apps.apple.com</code></td>
           <td>When you inspect a Mac App Store app and the App Store cross-check is enabled.</td>
-          <td>The inspected app's bundle ID and country code. No information about you, no information about your machine, nothing about other apps you've inspected.</td>
+          <td>The inspected app's bundle ID and country code. Nothing about you, your machine, or other apps you've inspected.</td>
         </tr>
         <tr>
           <td>System DNS resolver<br>(<code>NSLookup</code> / <code>getaddrinfo</code>)</td>
           <td>While dynamic monitoring is running, to label the destinations the inspected app contacts.</td>
-          <td>IP addresses observed in the inspected app's outbound traffic. No information about you. The query is reverse-only — the resolver is not asked to look up anything you didn't already see traffic to.</td>
+          <td>IP addresses observed in the inspected app's outbound traffic. No information about you. The query is reverse-only, so the resolver is not asked to look up anything you didn't already see traffic to.</td>
         </tr>
         <tr>
           <td><code>privacykey.github.io</code></td>
           <td>When the app checks for updates via Sparkle.</td>
-          <td>Your IP and User-Agent (as with any HTTP request). No information about which app you're inspecting. Auto-checks are <strong>off by default</strong> — opt in via Settings → Updates. The appcast feed is signed with EdDSA so a tampered response can't push an update.</td>
+          <td>Your IP and User-Agent (as with any HTTP request). No information about which app you're inspecting. Auto-checks are <strong>off by default</strong>. Opt in via Settings → Updates. The appcast feed is signed with EdDSA so a tampered response can't push an update.</td>
         </tr>
       </tbody>
     </table>
 
     <h3>What we explicitly do not do</h3>
     <ul>
-      <li>No analytics service. No Firebase, no Mixpanel, no Amplitude, no Sentry, no PostHog, no Segment, no homebrewed pixel.</li>
+      <li>No analytics service: not Firebase, Mixpanel, Amplitude, Sentry, PostHog, Segment, or a homebrewed pixel.</li>
       <li>No crash-report SDK. macOS' built-in crash reporter applies; it sends to Apple, not to us.</li>
       <li>No referrer tracking when you click links from the app.</li>
       <li>No fingerprinting. We don't know your machine's model, OS version, or chip family.</li>
@@ -271,7 +270,7 @@
       <li>Run <code>sfltool</code> to enumerate background tasks the app has registered (so the audit doesn't trigger a system admin prompt).</li>
       <li>Install and remove a <code>pf</code> packet-filter anchor when you flip the network kill switch on or off.</li>
     </ul>
-    <p>The helper validates clients by Team ID on connect — a binary not signed by the same Team ID can't talk to it. The full helper source is in <code>privacycommand/Sources/privacycommandHelper/</code> in the public repo.</p>
+    <p>The helper validates clients by Team ID on connect, and a binary not signed by the same Team ID can't talk to it. The full helper source is in <code>privacycommand/Sources/privacycommandHelper/</code> in the public repo.</p>
 
     <h2>Reports and what's in them</h2>
     <p>Every audit you run produces a report containing the inspected app's bundle ID, version, code-signing identity, and the output of every detector. Reports are written to <code>~/Library/Application Support/privacycommand/runs/</code> on your machine. They are never uploaded anywhere. You can export a report as JSON, HTML, or PDF; what you do with the export afterwards is up to you.</p>
@@ -280,16 +279,16 @@
     <p>You can run privacycommand with no outbound network at all by turning off three things in Settings:</p>
     <ul>
       <li><strong>App Store cross-check.</strong> Disable to skip <code>itunes.apple.com</code> and <code>apps.apple.com</code> requests.</li>
-      <li><strong>Reverse DNS labels.</strong> Disable to skip system resolver queries during monitoring — destinations will show as raw IPs.</li>
+      <li><strong>Reverse DNS labels.</strong> Disable to skip system resolver queries during monitoring, after which destinations show as raw IPs.</li>
       <li><strong>Update checks.</strong> Off by default; verify under Settings → Updates that auto-checks are still off.</li>
     </ul>
-    <p>If you're on a managed network that blocks GitHub or Apple endpoints by policy, the app degrades gracefully — features that require those endpoints are simply unavailable and the rest still works.</p>
+    <p>If you're on a managed network that blocks GitHub or Apple endpoints by policy, the app degrades gracefully. Features that require those endpoints are unavailable and the rest still works.</p>
 
     <h2>Changes to this page</h2>
     <p>The canonical version of this page lives in the <a href="https://github.com/privacykey/privacycommand/tree/main/docs" rel="noopener">project repository</a>. Material changes are announced in release notes. The hash of the previous version is committed alongside so you can see what changed.</p>
 
     <h2>Contact</h2>
-    <p>For privacy questions: <a href="mailto:privacy@privacykey.org">privacy@privacykey.org</a>. For security disclosures: <a href="mailto:security@privacykey.org">security@privacykey.org</a> (please don't open public GitHub issues for security findings — see the <a href="https://github.com/privacykey/privacycommand/blob/main/SECURITY.md" rel="noopener">SECURITY.md</a> for the full process).</p>
+    <p>For privacy questions: <a href="mailto:privacy@privacykey.org">privacy@privacykey.org</a>. For security disclosures: <a href="mailto:security@privacykey.org">security@privacykey.org</a> (please don't open public GitHub issues for security findings. See the <a href="https://github.com/privacykey/privacycommand/blob/main/SECURITY.md" rel="noopener">SECURITY.md</a> for the full process.)</p>
   </div>
 </main>
 
