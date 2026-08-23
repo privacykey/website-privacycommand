@@ -12,7 +12,7 @@
 <link rel="canonical" href="https://privacycommand.privacykey.org/privacy.html" />
 
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#0a0a18" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#0B0B12" media="(prefers-color-scheme: dark)" />
 <meta name="color-scheme" content="light dark" />
 
 <link rel="icon" href="assets/brand/privacycommand-icon.svg" type="image/svg+xml" />
@@ -56,9 +56,9 @@
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --ink: #f0f0f5; --slate: #c7d2dc; --muted: #a8a8b8;
-      --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
-      --surface: #111122; --surface-soft: #18182a;
+      --ink: #E8E8F2; --slate: #A0A0B4; --muted: #6E6E85;
+      --line: #242430; --line-strong: rgba(255,255,255,0.18);
+      --surface: #0B0B12; --surface-soft: #14141C;
       --indigo: #818CF8; --indigo-soft: rgba(129,140,248,0.18);
       --purple: #A78BFA; --purple-light: #C4B5FD;
       --link-color: #A5B4FC; --link-hover: #C7D2FE;
@@ -66,9 +66,9 @@
     }
   }
   :root[data-theme="dark"] {
-    --ink: #f0f0f5; --slate: #c7d2dc; --muted: #a8a8b8;
-    --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
-    --surface: #111122; --surface-soft: #18182a;
+    --ink: #E8E8F2; --slate: #A0A0B4; --muted: #6E6E85;
+    --line: #242430; --line-strong: rgba(255,255,255,0.18);
+    --surface: #0B0B12; --surface-soft: #14141C;
     --indigo: #818CF8; --indigo-soft: rgba(129,140,248,0.18);
     --purple: #A78BFA; --purple-light: #C4B5FD;
     --link-color: #A5B4FC; --link-hover: #C7D2FE;
@@ -152,9 +152,9 @@
     background: rgba(255,255,255,0.72);
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) nav.topnav { background: rgba(10,10,24,0.72); }
+    :root:not([data-theme="light"]) nav.topnav { background: rgba(11,11,18,0.72); }
   }
-  :root[data-theme="dark"] nav.topnav { background: rgba(10,10,24,0.72); }
+  :root[data-theme="dark"] nav.topnav { background: rgba(11,11,18,0.72); }
   nav.topnav .row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
   .brand-lockup { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); }
   .brand-lockup .mark { width: 32px; height: 32px; }
@@ -173,6 +173,26 @@
     display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center;
   }
   .site-footer a { color: var(--slate); }
+  /* Maker pill — footer credit chip linking to the maker's GitHub
+     profile. Fixed void-dark colours so the avatar always sits on the
+     family ground. */
+  .maker-pill {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 6px 15px 6px 6px;
+    background: #14141C;
+    border: 1px solid #242430;
+    border-radius: 999px;
+    font-size: 13.5px;
+    color: #E8E8F2;
+    text-decoration: none;
+  }
+  .maker-pill:hover { border-color: #3A3A44; }
+  .maker-pill img {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 1px solid #242430;
+    display: block;
+  }
 </style>
 </head>
 <body>
@@ -285,6 +305,7 @@
   <div class="container wide">
     <div class="row">
       <div>© 2026 privacykey · privacycommand is free, open-source software.</div>
+      <a class="maker-pill" href="https://github.com/AdamXweb" rel="noopener" aria-label="Made by adamxweb — GitHub profile"><img src="https://github.com/AdamXweb.png?size=128" alt="" width="26" height="26" loading="lazy" decoding="async" />adamxweb</a>
       <div>
         <a href="index.html">Home</a> ·
         <a href="about.html">About</a> ·
