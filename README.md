@@ -5,6 +5,11 @@ Marketing site for [privacycommand](https://github.com/privacykey/privacycommand
 Static HTML. No framework, no build step. Point any static host at the
 repository root (Netlify, Cloudflare Pages, GitHub Pages, S3 + CloudFront).
 
+Production is a Cloudflare Worker serving the repository root as static
+assets ([`wrangler.jsonc`](wrangler.jsonc)). Cloudflare Workers Builds is
+connected to this repository and deploys every push to `main` with
+`npx wrangler deploy`; `just deploy` does the same by hand.
+
 **Hostname:** `privacycommand.privacykey.org` *(DNS not configured yet)*
 
 Full product documentation lives separately, at
