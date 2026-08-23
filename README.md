@@ -27,7 +27,6 @@ Full product documentation lives separately, at
 ├── site.webmanifest        # PWA manifest
 ├── sitemap.xml
 ├── robots.txt              # Search engines welcome, training crawlers blocked
-├── llms.txt                # Preferred entry point for cooperating AI agents
 ├── security.txt            # RFC 9116 (mirrored under /.well-known/)
 ├── .well-known/
 │   └── security.txt

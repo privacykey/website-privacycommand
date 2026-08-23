@@ -101,7 +101,7 @@
       "name": "Is privacycommand really free?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Free and open-source under the MIT licence. No accounts, no subscriptions, no upsells. The full source is on GitHub for anyone to read or fork."
+        "text": "Yes, it's free and open-source under the MIT licence, with no accounts, subscriptions, or upsells. The full source is on GitHub for anyone to read or fork."
       }
     },
     {
@@ -109,7 +109,7 @@
       "name": "Does privacycommand need admin / root access?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No, not for the core report. Static analysis, App Store privacy-label cross-check, and Background Task Management audit run unprivileged. The optional helper unlocks live file-event monitoring (fs_usage) and the network kill switch (pf anchor) — installing it asks for admin once, after which it stays out of your way."
+        "text": "Not for the core report: static analysis, App Store privacy-label cross-check, and the Background Task Management audit all run unprivileged. The optional helper unlocks live file-event monitoring (fs_usage) and the network kill switch (pf anchor). Installing it asks for admin once, after which it stays out of your way."
       }
     },
     {
@@ -125,7 +125,7 @@
       "name": "Is it a malware sandbox?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Not exactly. privacycommand is a forensic auditor — it tells you what an app contains and what it does on a normal run. For risky apps you'd rather not run on bare metal, VM mode lets you ship the same analysis into a macOS VM (VirtualBuddy, UTM, Parallels) and stream observations back. It's adjacent to a sandbox; it's optimised for transparency rather than detonation."
+        "text": "Not exactly, because privacycommand is a forensic auditor that tells you what an app contains and what it does on a normal run. For risky apps you'd rather not run on bare metal, VM mode lets you ship the same analysis into a macOS VM (VirtualBuddy, UTM, Parallels) and stream observations back. It's adjacent to a sandbox; it's optimised for transparency rather than detonation."
       }
     },
     {
@@ -141,7 +141,7 @@
       "name": "What kinds of apps can I drop on it?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Any .app bundle, plus .dmg installers — privacycommand will mount and inspect the bundle inside. Mac App Store apps, Developer ID apps, Catalyst, Electron, Tauri, Java-on-mac wrappers, command-line apps wrapped as .app — they all parse. Apps without a bundle (raw command-line binaries) are out of scope today."
+        "text": "Any .app bundle, plus .dmg installers, which privacycommand will mount to inspect the bundle inside. Mac App Store apps, Developer ID apps, Catalyst, Electron, Tauri, Java-on-mac wrappers, and command-line apps wrapped as .app all parse. Apps without a bundle (raw command-line binaries) are out of scope today."
       }
     },
     {
@@ -149,7 +149,7 @@
       "name": "What does it find that I couldn't find by hand?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The same things you could find with codesign, otool, plutil, fs_usage, sfltool, and a stack of grep — except cross-referenced and explained. The point is consistency: privacycommand runs every detector against every drop, in the same shape, and explains every finding in plain English so the report is shareable with someone who isn't a binary-analysis nerd."
+        "text": "The same things you could find with codesign, otool, plutil, fs_usage, sfltool, and a stack of grep, except cross-referenced and explained. The difference is consistency: privacycommand runs every detector against every drop, in the same shape, and explains every finding in plain English so the report is shareable with someone who isn't a binary-analysis nerd."
       }
     },
     {
@@ -157,15 +157,12 @@
       "name": "Can I export reports for a ticket or a vendor review?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes — every audit exports as JSON, HTML, or PDF. The HTML and PDF exports are designed to read like an IT vendor-review one-pager; the JSON keeps every detector's raw output for downstream tooling."
+        "text": "Yes, every audit exports as JSON, HTML, or PDF. The HTML and PDF exports are designed to read like an IT vendor-review one-pager; the JSON keeps every detector's raw output for downstream tooling."
       }
     }
   ]
 }
 </script>
-
-<!-- AI / LLM crawl etiquette -->
-<link rel="alternate" type="text/markdown" title="llms.txt — site summary for AI agents" href="/llms.txt" />
 
 <!-- Fonts — self-hosted Inter (SIL OFL-1.1) -->
 <link rel="preload" href="assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
@@ -985,7 +982,7 @@
   <div class="container">
     <span class="eyebrow reveal">A privacykey project</span>
     <h1 id="hero-title" class="reveal delay-1">Drop an app. <span class="accent">See everything it touches.</span></h1>
-    <p class="lede reveal delay-2">privacycommand is a forensic permission auditor for macOS. Drag a <code>.app</code> bundle onto it and get the whole story — every entitlement, signed identity, hard-coded domain, embedded SDK, login item, and live file or network event. Built so IT and security teams can review a vendor app in minutes, not afternoons.</p>
+    <p class="lede reveal delay-2">privacycommand is a forensic permission auditor for macOS. Drag a <code>.app</code> bundle onto it and get the whole story: every entitlement, signed identity, hard-coded domain, embedded SDK, login item, and live file or network event. Built so IT and security teams can review a vendor app in minutes.</p>
     <div class="cta-row reveal delay-3">
       <a href="#install" class="btn btn-primary btn-lg">
         Download for Mac
@@ -1266,8 +1263,8 @@
       <div class="reveal">
         <span class="kicker">The gap</span>
         <h2>Permissions tell you what an app <em>can</em> do. <span class="accent">Not what it does.</span></h2>
-        <p>macOS shows you the prompts. The App Store shows you what a developer <em>says</em> they collect. Neither tells you what's actually inside the binary you just installed — the hard-coded analytics endpoints, the embedded ad SDK, the launch agent that survives reboots, the file paths the app touches the moment you open it.</p>
-        <p>privacycommand reads what's actually there. Static signals from the bundle. Live signals from a real run. The developer's declared Privacy Manifest cross-checked against both. One report, in plain English, exportable as JSON, HTML, or PDF.</p>
+        <p>macOS shows you the prompts. The App Store shows you what a developer <em>says</em> they collect. Neither tells you what's actually inside the binary you just installed, like the hard-coded analytics endpoints, the embedded ad SDK, the launch agent that survives reboots, the file paths the app touches the moment you open it.</p>
+        <p>privacycommand reads what's actually there: static signals from the bundle, live signals from a real run, and the developer's declared Privacy Manifest cross-checked against both. You get one report in plain English, exportable as JSON, HTML, or PDF.</p>
       </div>
       <div class="reveal delay-1" aria-hidden="true">
         <div class="mock-window lifted">
@@ -1305,21 +1302,21 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </div>
         <h3>Watch an app live</h3>
-        <p>Network destinations, file events, child processes, and resource usage all stream into one view. A heat-graded callout fires the moment something spikes — a burst of disk writes, a fresh outbound host, a CPU climb that wasn't there a second ago.</p>
+        <p>Network destinations, file events, child processes, and resource usage all stream into one view. A heat-graded callout fires the moment something spikes, such as a burst of disk writes, a fresh outbound host, or a CPU climb that wasn't there a second ago.</p>
       </article>
       <article class="small-card reveal delay-1">
         <div class="icon" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         </div>
         <h3>Check an update before it lands</h3>
-        <p>Drop in a candidate update and diff it against the version on disk. For Sparkle-distributed apps, privacycommand reads the appcast itself and pulls the next release straight into the inspector — so the audit happens before the live app's auto-updater ever sees it. The History tab does the same for any two saved reports: added and removed entitlements, domains, SDKs and login items are colour-cued, with a show-only-changes toggle.</p>
+        <p>Drop in a candidate update and diff it against the version on disk. For Sparkle-distributed apps, privacycommand reads the appcast itself and pulls the next release straight into the inspector, so the audit happens before the live app's auto-updater ever sees it. The History tab does the same for any two saved reports: added and removed entitlements, domains, SDKs and login items are colour-cued, with a show-only-changes toggle.</p>
       </article>
       <article class="small-card reveal delay-2">
         <div class="icon" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
         </div>
         <h3>Links to common tools</h3>
-        <p>Every finding shows the underlying command — <code>codesign</code>, <code>otool</code>, <code>plutil</code>, <code>fs_usage</code>, <code>sfltool</code>, <code>lsof</code>, <code>mdls</code> — copy-able with one click. Quick-launch into Suspicious Package, Hopper, or your own preferred tool when you want to dig deeper.</p>
+        <p>Every finding shows the underlying command (<code>codesign</code>, <code>otool</code>, <code>plutil</code>, <code>fs_usage</code>, <code>sfltool</code>, <code>lsof</code>, <code>mdls</code>), copy-able with one click. Quick-launch into Suspicious Package, Hopper, or your own preferred tool when you want to dig deeper.</p>
       </article>
       <article class="small-card reveal">
         <div class="icon" aria-hidden="true">
@@ -1340,28 +1337,28 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
         </div>
         <h3>Codesign &amp; notarisation</h3>
-        <p>Full chain validation — Developer ID, Team ID, hardened-runtime flags, stapled notarization ticket, SHA-256 of the bundle, <code>spctl</code> assessment. Every relaxation flagged with the entitlement key behind it.</p>
+        <p>Full chain validation: Developer ID, Team ID, hardened-runtime flags, stapled notarization ticket, SHA-256 of the bundle, <code>spctl</code> assessment. Every relaxation flagged with the entitlement key behind it.</p>
       </article>
       <article class="small-card reveal">
         <div class="icon" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         </div>
         <h3>Batch scan a whole fleet</h3>
-        <p>Point privacycommand at a folder — or all of <code>/Applications</code> — and triage every app at once in a sortable, filterable table: risk tier, warning and error counts, and the headline signals for each. The same analyzer runs on every bundle. One click opens any row in the main window for the full deep-dive.</p>
+        <p>Point privacycommand at a folder, or all of <code>/Applications</code>, and triage every app at once in a sortable, filterable table: risk tier, warning and error counts, and the headline signals for each. The same analyzer runs on every bundle. One click opens any row in the main window for the full deep-dive.</p>
       </article>
       <article class="small-card reveal delay-1">
         <div class="icon" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
         </div>
         <h3>Decompile the call site</h3>
-        <p>The binary summary maps every function that can open a connection — BSD sockets, <code>getaddrinfo</code>, CFNetwork, Network.framework — with any host or URL literal sitting beside it. Decompile any call site on demand if you have Ghidra installed. For relaunchable apps without hardened runtime, capture a live call stack that ties a real outbound connection back to the function that opened it.</p>
+        <p>The binary summary maps every function that can open a connection (BSD sockets, <code>getaddrinfo</code>, CFNetwork, Network.framework) with any host or URL literal sitting beside it. Decompile any call site on demand if you have Ghidra installed. For relaunchable apps without hardened runtime, capture a live call stack that ties a real outbound connection back to the function that opened it.</p>
       </article>
       <article class="small-card reveal delay-2">
         <div class="icon" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
         </div>
         <h3>Claims vs. binary</h3>
-        <p>When the bundle came from the Mac App Store, privacycommand pulls the developer's declared Privacy Nutrition Labels from Apple and sets them beside its own static-analysis findings — so you can see for yourself whether what they say they collect matches what the binary actually reaches for.</p>
+        <p>When the bundle came from the Mac App Store, privacycommand pulls the developer's declared Privacy Nutrition Labels from Apple and sets them beside its own static-analysis findings, so you can see for yourself whether what they say they collect matches what the binary actually reaches for.</p>
       </article>
     </div>
   </div>
@@ -1377,49 +1374,49 @@
       <details class="faq-item">
         <summary>Is privacycommand really free?</summary>
         <div class="faq-answer">
-          <p>Yes. Free and open-source under the MIT licence. No accounts, no subscriptions, no upsells. The full source is on <a href="https://github.com/privacykey/privacycommand" rel="noopener">GitHub</a> for anyone to read or fork.</p>
+          <p>Yes, it's free and open-source under the MIT licence, with no accounts, subscriptions, or upsells. The full source is on <a href="https://github.com/privacykey/privacycommand" rel="noopener">GitHub</a> for anyone to read or fork.</p>
         </div>
       </details>
       <details class="faq-item">
         <summary>Does privacycommand need admin / root access?</summary>
         <div class="faq-answer">
-          <p>No, not for the core report. Static analysis, App Store privacy-label cross-check, and the Background Task Management audit run unprivileged. The optional helper unlocks live file-event monitoring (<code>fs_usage</code>) and the network kill switch (<code>pf</code> anchor) — installing it asks for admin once, after which it stays out of your way.</p>
+          <p>Not for the core report: static analysis, App Store privacy-label cross-check, and the Background Task Management audit all run unprivileged. The optional helper unlocks live file-event monitoring (<code>fs_usage</code>) and the network kill switch (<code>pf</code> anchor). Installing it asks for admin once, after which it stays out of your way.</p>
         </div>
       </details>
       <details class="faq-item">
         <summary>Does privacycommand send anything anywhere?</summary>
         <div class="faq-answer">
-          <p>All analysis runs locally. The app makes three explicit, bounded network calls: DNS reverse lookups for destinations the inspected app contacts (so the Network tab can label <code>8.8.8.8</code> as <code>dns.google</code>), Mac App Store privacy-label lookups against <code>itunes.apple.com</code> keyed on the inspected app's bundle ID, and the Sparkle appcast fetch when you check for updates. The inspected app's contents never leave your machine.</p>
+          <p>All analysis runs locally, and the app makes only three explicit, bounded network calls: DNS reverse lookups for destinations the inspected app contacts (so the Network tab can label <code>8.8.8.8</code> as <code>dns.google</code>), Mac App Store privacy-label lookups against <code>itunes.apple.com</code> keyed on the inspected app's bundle ID, and the Sparkle appcast fetch when you check for updates. The inspected app's contents never leave your machine.</p>
         </div>
       </details>
       <details class="faq-item">
         <summary>Is it a malware sandbox?</summary>
         <div class="faq-answer">
-          <p>Not exactly. privacycommand is a forensic auditor — it tells you what an app contains and what it does on a normal run. For risky apps you'd rather not run on bare metal, VM mode lets you ship the same analysis into a macOS VM (VirtualBuddy, UTM, Parallels) and stream observations back. It's adjacent to a sandbox; it's optimised for transparency rather than detonation.</p>
+          <p>Not exactly, because privacycommand is a forensic auditor that tells you what an app contains and what it does on a normal run. For risky apps you'd rather not run on bare metal, VM mode lets you ship the same analysis into a macOS VM (VirtualBuddy, UTM, Parallels) and stream observations back. It's adjacent to a sandbox; it's optimised for transparency rather than detonation.</p>
         </div>
       </details>
       <details class="faq-item">
         <summary>Apple Silicon, Intel, both?</summary>
         <div class="faq-answer">
-          <p>Both. The DMG is a universal binary signed and notarized for macOS 13 (Ventura) and later. The Homebrew cask resolves to the same artefact.</p>
+          <p>Both, because the DMG is a universal binary signed and notarized for macOS 13 (Ventura) and later. The Homebrew cask resolves to the same artefact.</p>
         </div>
       </details>
       <details class="faq-item">
         <summary>What kinds of apps can I drop on it?</summary>
         <div class="faq-answer">
-          <p>Any <code>.app</code> bundle, plus <code>.dmg</code> installers — privacycommand will mount and inspect the bundle inside. Mac App Store apps, Developer ID apps, Catalyst, Electron, Tauri, Java-on-mac wrappers, command-line apps wrapped as <code>.app</code> — they all parse. Apps without a bundle (raw command-line binaries) are out of scope today.</p>
+          <p>Any <code>.app</code> bundle, plus <code>.dmg</code> installers, which privacycommand will mount to inspect the bundle inside. Mac App Store apps, Developer ID apps, Catalyst, Electron, Tauri, Java-on-mac wrappers, and command-line apps wrapped as <code>.app</code> all parse. Apps without a bundle (raw command-line binaries) are out of scope today.</p>
         </div>
       </details>
       <details class="faq-item">
         <summary>What does it find that I couldn't find by hand?</summary>
         <div class="faq-answer">
-          <p>The same things you could find with <code>codesign</code>, <code>otool</code>, <code>plutil</code>, <code>fs_usage</code>, <code>sfltool</code>, and a stack of <code>grep</code> — except cross-referenced and explained. The point is consistency: privacycommand runs every detector against every drop, in the same shape, and explains every finding in plain English so the report is shareable with someone who isn't a binary-analysis nerd.</p>
+          <p>The same things you could find with <code>codesign</code>, <code>otool</code>, <code>plutil</code>, <code>fs_usage</code>, <code>sfltool</code>, and a stack of <code>grep</code>, except cross-referenced and explained. The difference is consistency: privacycommand runs every detector against every drop, in the same shape, and explains every finding in plain English so the report is shareable with someone who isn't a binary-analysis nerd.</p>
         </div>
       </details>
       <details class="faq-item">
         <summary>Can I export reports for a ticket or a vendor review?</summary>
         <div class="faq-answer">
-          <p>Yes — every audit exports as JSON, HTML, or PDF. The HTML and PDF exports are designed to read like an IT vendor-review one-pager; the JSON keeps every detector's raw output for downstream tooling.</p>
+          <p>Yes, every audit exports as JSON, HTML, or PDF. The HTML and PDF exports are designed to read like an IT vendor-review one-pager; the JSON keeps every detector's raw output for downstream tooling.</p>
         </div>
       </details>
     </div>
@@ -1448,7 +1445,7 @@
       <article class="install-card reveal delay-1" aria-labelledby="install-dmg">
         <div class="platform">Direct download</div>
         <h3 id="install-dmg">Signed DMG</h3>
-        <p>The signed and notarized <code>.dmg</code> from the latest GitHub release. Drag the app into <code>/Applications</code>, you're done. In-app updates ship via Sparkle 2 — auto-checks are <em>off by default</em>, you opt in via Settings → Updates.</p>
+        <p>The signed and notarized <code>.dmg</code> from the latest GitHub release. Drag the app into <code>/Applications</code>, you're done. In-app updates ship via Sparkle 2. Auto-checks are <em>off by default</em>, and you opt in via Settings → Updates.</p>
         <a href="https://github.com/privacykey/privacycommand/releases/latest" class="btn btn-primary btn-lg" rel="noopener">
           Download .dmg
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -1461,7 +1458,7 @@
       <article class="install-card reveal delay-2" aria-labelledby="install-source">
         <div class="platform">For tinkerers</div>
         <h3 id="install-source">Build from source</h3>
-        <p>Open the Xcode project or build the SPM target directly. The pure-Swift analyzer is AppKit-free — you can drive it from the CLI (<code>auditctl</code>) or wrap it in your own tooling.</p>
+        <p>Open the Xcode project or build the SPM target directly. The pure-Swift analyzer is AppKit-free, so you can drive it from the CLI (<code>auditctl</code>) or wrap it in your own tooling.</p>
         <div class="terminal" role="img" aria-label="git clone privacykey privacycommand, then swift build">
           <div><span class="pr">$</span> <span class="cm">git clone</span> <span class="ar">github.com/privacykey/privacycommand</span></div>
           <div><span class="pr">$</span> <span class="cm">cd</span> <span class="ar">privacycommand/privacycommand</span></div>
@@ -1502,7 +1499,6 @@
           <li><a href="privacy.html">Privacy policy</a></li>
           <li><a href="legal.html">Legal &amp; licences</a></li>
           <li><a href="/.well-known/security.txt" rel="noopener">security.txt</a></li>
-          <li><a href="/llms.txt" rel="noopener">llms.txt</a></li>
         </ul>
       </div>
       <div>

@@ -1,19 +1,15 @@
 # privacycommand — robots.txt
 # ─────────────────────────────────────────────────────────────────────
-# Crawlers welcome. The site is a small static page about a free,
-# open-source app. We want regular search engines to index it freely,
-# and we welcome on-demand AI agents that visit a single page in
-# response to a user's question (and cite the source). What we do not
-# allow is bulk crawling for training-data ingestion.
+# The site is a small static page about a free, open-source app.
+# Regular search engines may index it freely. Bulk crawling for
+# training-data ingestion is not allowed.
 # ─────────────────────────────────────────────────────────────────────
 
 # ────────── Default policy ──────────
 User-agent: *
 Allow: /
 
-# ────────── On-demand AI agents — ALLOWED ──────────
-# These bots fetch a page when a user asks a question, then cite the
-# answer back to that user.
+# ────────── On-demand fetchers — ALLOWED ──────────
 User-agent: ChatGPT-User
 Allow: /
 
@@ -36,10 +32,9 @@ User-agent: YouBot
 Allow: /
 
 # ────────── Training-data crawlers — DISALLOWED ──────────
-# The marketing copy on this site is the maintainers' voice and we'd
-# rather it not be ingested for model training without consent. The
-# underlying *code* is MIT-licensed and lives on GitHub — train on
-# that instead if you'd like to learn how privacycommand works.
+# The copy on this site is the maintainers' voice and is not to be
+# ingested for model training without consent. The code is MIT-licensed
+# and lives on GitHub.
 
 User-agent: GPTBot
 Disallow: /
@@ -94,6 +89,3 @@ Disallow: /
 
 # Pointers
 Sitemap: https://privacycommand.privacykey.org/sitemap.xml
-
-# Machine-readable LLM site map (per llmstxt.org convention)
-# Lives at /llms.txt — please prefer it over scraping the HTML.
