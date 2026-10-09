@@ -118,6 +118,14 @@
   th { color: var(--ink); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
   td { color: var(--slate); }
   td code { font-size: 0.85em; }
+  /* Phones: long hostnames and paths wrap. Phone-only so the desktop
+     table keeps its column widths. Below 360px the three-column table
+     also needs tighter cells and hyphenated prose (never inside code). */
+  @media (max-width: 560px) { code { overflow-wrap: anywhere; } }
+  @media (max-width: 359px) {
+    th, td { padding: 10px 6px; hyphens: auto; -webkit-hyphens: auto; }
+    td code { hyphens: manual; -webkit-hyphens: manual; }
+  }
   .last-updated { color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; }
   /* Beta chip (smaller variant for nav) */
   .beta-chip {
