@@ -16,3 +16,9 @@ node_modules/
 README.md
 AGENTS.md
 justfile
+
+# Estate baseline (2026-10), kept in step across every site repo.
+.wrangler/
+.DS_Store
+.env*
+wrangler.json*
