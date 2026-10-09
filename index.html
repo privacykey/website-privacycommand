@@ -85,7 +85,7 @@
     "Network kill switch via pf anchor — block the inspected app's outbound traffic",
     "VM mode — analyse risky apps inside a macOS VM via guest agent",
     "Reports export as JSON, HTML, or PDF",
-    "privacycommand command-line tool for scripting, CI and previewing Homebrew cask updates, with zsh, bash and fish tab completion",
+    "privacycommand command-line tool for scripting, CI, previewing Homebrew cask updates and risk-gated upgrades, with zsh, bash and fish tab completion",
     "Local-first — analysis stays on your machine, no telemetry"
   ]
 }
@@ -531,7 +531,7 @@
   .brand-lockup .mark img { width: 100%; height: 100%; }
   .brand-lockup .name { font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
   nav.topnav ul.links { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
-  nav.topnav ul.links a { color: var(--slate); font-size: 0.95rem; font-weight: 500; }
+  nav.topnav ul.links a { color: var(--slate); font-size: 0.95rem; font-weight: 500; white-space: nowrap; }
   nav.topnav ul.links a:hover { color: var(--ink); }
   .theme-toggle {
     width: 40px; height: 40px; border-radius: 999px;
@@ -544,7 +544,9 @@
   .theme-dark .theme-toggle .icon-moon { display: none; }
   .theme-dark .theme-toggle .icon-sun { display: block; }
 
-  @media (max-width: 760px) {
+  /* 840px, not 760px: with the Command line link the nav needs that much
+     room before the links collapse, or the page scrolls sideways. */
+  @media (max-width: 840px) {
     nav.topnav ul.links { display: none; }
     /* The row's own padding wipes out the container gutter, which left the
        brand and Download button flush against the screen edges. */
@@ -1424,7 +1426,7 @@
       <div class="reveal">
         <span class="kicker">Command line</span>
         <h2>The same analyzer, <span class="accent">from Terminal.</span></h2>
-        <p>The app comes with a command-line tool of the same name. Audit an app by name or path, get JSON for a CI job, or run <code>privacycommand preview</code> to check your outdated Homebrew casks before <code>brew upgrade</code> replaces them. It never runs the upgrade itself.</p>
+        <p>The app comes with a command-line tool of the same name. Audit an app by name or path, get JSON for a CI job, or run <code>privacycommand preview</code> to check your outdated Homebrew casks before <code>brew upgrade</code> replaces them. <code>privacycommand upgrade --max-risk medium</code> goes a step further: it upgrades the casks that stay within that risk limit and holds the riskier ones for you to review.</p>
         <p>A Homebrew install puts <code>privacycommand</code> on your <code>PATH</code>, with tab completion for zsh, bash and fish. With the disk image, use <strong>Install Command Line Tool…</strong> in the privacycommand menu. The tool lives inside the app, so it updates with it. It ships in the app from the release after 0.1.5.</p>
         <a href="https://github.com/privacykey/privacycommand#get-it" class="btn btn-ghost" rel="noopener">Command-line setup</a>
       </div>
