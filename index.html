@@ -57,7 +57,7 @@
   "name": "privacycommand",
   "applicationCategory": "SecurityApplication",
   "applicationSubCategory": "Forensics",
-  "operatingSystem": "macOS 13+",
+  "operatingSystem": "macOS 14+",
   "description": "A free, open-source macOS forensic auditor that drops onto any .app bundle and reports every entitlement, signed identity, hard-coded domain, embedded SDK, login item, and live file or network event the app uses.",
   "url": "https://privacycommand.privacykey.org/",
   "downloadUrl": "https://github.com/privacykey/privacycommand/releases/latest",
@@ -134,7 +134,7 @@
       "name": "Apple Silicon, Intel, both?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Both. The DMG is a universal binary signed and notarized for macOS 13 (Ventura) and later. The Homebrew cask resolves to the same artefact."
+        "text": "Both, because the DMG is a universal binary signed and notarized for macOS 14 (Sonoma) and later. The Homebrew cask resolves to the same artefact."
       }
     },
     {
@@ -546,6 +546,9 @@
 
   @media (max-width: 760px) {
     nav.topnav ul.links { display: none; }
+    /* The row's own padding wipes out the container gutter, which left the
+       brand and Download button flush against the screen edges. */
+    nav.topnav .row { padding-left: 24px; padding-right: 24px; }
   }
 
   /* ── Sections ── */
@@ -609,7 +612,7 @@
   .mock-titlebar .dot.g { background: #28c840; }
   .mock-titlebar .title { margin-left: 10px; font-size: 0.82rem; color: var(--mock-text-3); flex: 1; text-align: center; padding-right: 60px; }
 
-  .mock-canvas { display: grid; grid-template-rows: auto 1fr; min-height: 420px; }
+  .mock-canvas { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; min-height: 420px; }
   .mock-nav {
     display: flex; align-items: center; gap: 14px;
     padding: 10px 16px;
@@ -771,7 +774,7 @@
   /* Findings list — used in hero + dashboard scroll */
   .findings { display: grid; gap: 10px; }
   .finding {
-    display: grid; grid-template-columns: 32px 1fr auto; gap: 14px; align-items: center;
+    display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 14px; align-items: center;
     padding: 12px 14px;
     background: var(--mock-surface);
     border: 1px solid var(--mock-border);
@@ -796,6 +799,35 @@
     text-transform: uppercase; letter-spacing: 0.04em;
   }
 
+  /* Long identifiers, hosts and paths in the mocks wrap rather than being cut off. */
+  .finding .detail, .static-row .det, .telemetry-row .src,
+  .net-row .host, .stream .path, .mock-code { overflow-wrap: anywhere; }
+
+  /* Below 760px the mock's tab bar no longer fits beside the logo and file
+     name, so the tabs wrap onto their own row. */
+  @media (max-width: 760px) {
+    .mock-nav { flex-wrap: wrap; row-gap: 8px; }
+    .mock-nav .tabs { order: 1; flex-basis: 100%; flex-wrap: wrap; }
+    .mock-nav .right { margin-left: auto; }
+  }
+  /* Phones: the mock is about 300px wide. Tags, source classes and byte
+     counts drop onto a second line under the name they belong to. */
+  @media (max-width: 560px) {
+    .mock-titlebar .title { padding-right: 0; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mock-body { padding: 14px; }
+    .finding { grid-template-columns: 28px minmax(0, 1fr); gap: 6px 12px; }
+    .finding .tag { grid-column: 2; justify-self: start; }
+    .telemetry-row { grid-template-columns: minmax(0, 1fr) auto; row-gap: 2px; }
+    .telemetry-row .src { grid-column: 1 / -1; }
+    .net-toolbar { flex-wrap: wrap; gap: 8px; }
+    .kill-switch { white-space: nowrap; }
+    .net-row { grid-template-columns: auto minmax(0, 1fr) auto; row-gap: 2px; }
+    .net-row > :nth-child(2) { grid-column: 2 / -1; }
+    .net-row > .bytes { grid-row: 2; }
+    .net-row > .bytes:nth-child(3) { grid-column: 2; text-align: left; }
+    .net-row > .bytes:nth-child(4) { grid-column: 3; }
+  }
+
   /* ── Stat strip ── */
   .stat-strip {
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
@@ -817,6 +849,7 @@
   .two-col {
     display: grid; grid-template-columns: 1.05fr 1fr; gap: 64px; align-items: center;
   }
+  .two-col > * { min-width: 0; }  /* don't let a long unbroken word widen the column */
   @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; gap: 36px; } }
 
   /* Small feature cards (6-up grid) */
@@ -938,6 +971,16 @@
     .btn { min-height: 44px; }
     .theme-toggle { width: 44px; height: 44px; }
     nav.topnav ul.links a { padding: 10px 0; }
+    /* Fit the nav in 375px: drop the beta chip (the hero shows it) and
+       shrink Download to its icon. The link keeps its aria-label. */
+    .beta-chip-nav { display: none; }
+    .nav-download { width: 44px; padding: 0; justify-content: center; }
+    .nav-download .btn-label { display: none; }
+    /* Wrap long commands like a real terminal does, rather than hiding
+       the end of them behind a sideways scroll. The smaller type and card
+       padding keep the brew command on one line down to 360px. */
+    .install-card { padding: 22px; }
+    .terminal { font-size: 0.8rem; overflow-wrap: anywhere; }
   }
 </style>
 </head>
@@ -975,8 +1018,8 @@
           <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
-      <a href="#install" class="btn btn-primary" aria-label="Download privacycommand">
-        Download
+      <a href="#install" class="btn btn-primary nav-download" aria-label="Download privacycommand">
+        <span class="btn-label">Download</span>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
           <path d="M7 1.5v8M3.5 6L7 9.5 10.5 6M2 12.5h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -1007,7 +1050,7 @@
         Beta
         <span class="version-num" data-version data-release="app">v0.1.5</span>
       </a>
-      <span class="cta-meta">Free · MIT · macOS 13+ · in active development</span>
+      <span class="cta-meta">Free · MIT · macOS 14+ · in active development</span>
     </div>
 
     <!-- Hero device — Dashboard mock window -->
@@ -1283,7 +1326,7 @@
             <span class="title">Privacy Manifest cross-check</span>
           </div>
           <div class="mock-body" style="padding: 22px;">
-            <div style="display:grid;gap:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.82rem;">
+            <div class="mock-code" style="display:grid;gap:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.82rem;">
               <div style="color:var(--mock-text-2);">DECLARED in PrivacyInfo.xcprivacy</div>
               <div style="color:var(--mock-text);">  NSPrivacyAccessedAPICategoryUserDefaults · CA92.1</div>
               <div style="color:var(--mock-text);">  NSPrivacyAccessedAPICategoryFileTimestamp · DDA9.1</div>
@@ -1441,7 +1484,7 @@
       <details class="faq-item">
         <summary>Apple Silicon, Intel, both?</summary>
         <div class="faq-answer">
-          <p>Both, because the DMG is a universal binary signed and notarized for macOS 13 (Ventura) and later. The Homebrew cask resolves to the same artefact.</p>
+          <p>Both, because the DMG is a universal binary signed and notarized for macOS 14 (Sonoma) and later. The Homebrew cask resolves to the same artefact.</p>
         </div>
       </details>
       <details class="faq-item">
@@ -1501,7 +1544,7 @@
             <path d="M7 1.5v8M3.5 6L7 9.5 10.5 6M2 12.5h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
-        <div class="footer-meta">Universal binary · Apple Silicon &amp; Intel · macOS 13+</div>
+        <div class="footer-meta">Universal binary · Apple Silicon &amp; Intel · macOS 14+</div>
       </article>
 
       <article class="install-card reveal delay-2" aria-labelledby="install-source">
