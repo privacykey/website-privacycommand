@@ -1,7 +1,10 @@
 # See /.well-known/security.txt — this duplicate exists so the
 # legacy RFC 5785 path works too.
+Contact: https://github.com/privacykey/privacycommand/security/advisories/new
 Contact: mailto:security@privacykey.org
+Encryption: https://github.com/AdamXweb.gpg
+Encryption: openpgp4fpr:54BFCE808324E569FB1919B304AAA3CBD117D9B2
 Expires: 2027-04-30T00:00:00.000Z
 Preferred-Languages: en
 Canonical: https://privacycommand.privacykey.org/.well-known/security.txt
-Policy: https://github.com/privacykey/privacycommand/blob/main/SECURITY.md
+Policy: https://github.com/privacykey/privacycommand/blob/main/.github/SECURITY.md
