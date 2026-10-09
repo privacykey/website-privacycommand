@@ -85,6 +85,7 @@
     "Network kill switch via pf anchor — block the inspected app's outbound traffic",
     "VM mode — analyse risky apps inside a macOS VM via guest agent",
     "Reports export as JSON, HTML, or PDF",
+    "privacycommand command-line tool for scripting, CI, previewing Homebrew cask updates and risk-gated upgrades, with zsh, bash and fish tab completion",
     "Local-first — analysis stays on your machine, no telemetry"
   ]
 }
@@ -150,6 +151,14 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "The same things you could find with codesign, otool, plutil, fs_usage, sfltool, and a stack of grep, except cross-referenced and explained. The difference is consistency: privacycommand runs every detector against every drop, in the same shape, and explains every finding in plain English so the report is shareable with someone who isn't a binary-analysis nerd."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use it from Terminal or in CI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The app comes with a privacycommand command-line tool that runs the same analyzer. Homebrew installs put it on your PATH; with the disk image, use Install Command Line Tool… in the privacycommand menu. Use --json for machine-readable output and --warn-exit to fail a CI job on findings. Tab completion is available for zsh, bash and fish."
       }
     },
     {
@@ -522,7 +531,7 @@
   .brand-lockup .mark img { width: 100%; height: 100%; }
   .brand-lockup .name { font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
   nav.topnav ul.links { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
-  nav.topnav ul.links a { color: var(--slate); font-size: 0.95rem; font-weight: 500; }
+  nav.topnav ul.links a { color: var(--slate); font-size: 0.95rem; font-weight: 500; white-space: nowrap; }
   nav.topnav ul.links a:hover { color: var(--ink); }
   .theme-toggle {
     width: 40px; height: 40px; border-radius: 999px;
@@ -535,7 +544,9 @@
   .theme-dark .theme-toggle .icon-moon { display: none; }
   .theme-dark .theme-toggle .icon-sun { display: block; }
 
-  @media (max-width: 760px) {
+  /* 840px, not 760px: with the Command line link the nav needs that much
+     room before the links collapse, or the page scrolls sideways. */
+  @media (max-width: 840px) {
     nav.topnav ul.links { display: none; }
     /* The row's own padding wipes out the container gutter, which left the
        brand and Download button flush against the screen edges. */
@@ -994,6 +1005,7 @@
     </a>
     <ul class="links" role="list">
       <li><a href="#features">Features</a></li>
+      <li><a href="#cli">Command line</a></li>
       <li><a href="#faq">FAQ</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="#install">Install</a></li>
@@ -1407,6 +1419,39 @@
   </div>
 </section>
 
+<!-- ====================== COMMAND LINE ====================== -->
+<section class="bg-soft" id="cli">
+  <div class="container">
+    <div class="two-col">
+      <div class="reveal">
+        <span class="kicker">Command line</span>
+        <h2>The same analyzer, <span class="accent">from Terminal.</span></h2>
+        <p>The app comes with a command-line tool of the same name. Audit an app by name or path, get JSON for a CI job, or run <code>privacycommand preview</code> to check your outdated Homebrew casks before <code>brew upgrade</code> replaces them. <code>privacycommand upgrade --max-risk medium</code> goes a step further: it upgrades the casks that stay within that risk limit and holds the riskier ones for you to review.</p>
+        <p>A Homebrew install puts <code>privacycommand</code> on your <code>PATH</code>, with tab completion for zsh, bash and fish. With the disk image, use <strong>Install Command Line Tool…</strong> in the privacycommand menu. The tool lives inside the app, so it updates with it. It ships in the app from the release after 0.1.5.</p>
+        <a href="https://github.com/privacykey/privacycommand#get-it" class="btn btn-ghost" rel="noopener">Command-line setup</a>
+      </div>
+      <div class="reveal delay-1" aria-hidden="true">
+        <div class="mock-window lifted">
+          <div class="mock-titlebar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="title">Terminal — zsh</span>
+          </div>
+          <div class="mock-body" style="padding: 22px;">
+            <div style="display:grid;gap:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.82rem;">
+              <div style="color:var(--mock-text);"><span style="color:var(--mock-text-3);">%</span> <span style="color:var(--mock-indigo);">privacycommand</span> Calculator --short</div>
+              <div style="color:var(--mock-text-2);"><span style="color:var(--sev-green);">✓</span> Calculator (com.apple.calculator) — Nothing noteworthy — low risk (0/100).</div>
+              <div style="color:var(--mock-text);margin-top:12px;"><span style="color:var(--mock-text-3);">%</span> <span style="color:var(--mock-indigo);">privacycommand</span> preview --min-tier <span style="color:var(--mock-text-3);">⇥</span></div>
+              <div style="color:var(--purple-light);">critical&nbsp;&nbsp;high&nbsp;&nbsp;low&nbsp;&nbsp;medium</div>
+              <div style="color:var(--mock-text-3);margin-top:12px;"># ~/.zshrc, if you didn't install with Homebrew</div>
+              <div style="color:var(--mock-text);">eval "$(<span style="color:var(--mock-indigo);">privacycommand</span> completion zsh)"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ====================== FAQ ====================== -->
 <section id="faq">
   <div class="container">
@@ -1457,6 +1502,12 @@
         </div>
       </details>
       <details class="faq-item">
+        <summary>Can I use it from Terminal or in CI?</summary>
+        <div class="faq-answer">
+          <p>Yes. The app comes with a <code>privacycommand</code> command-line tool that runs the same analyzer. Homebrew installs put it on your <code>PATH</code>; with the disk image, use <strong>Install Command Line Tool…</strong> in the privacycommand menu. Use <code>--json</code> for machine-readable output and <code>--warn-exit</code> to fail a CI job on findings. Tab completion is available for zsh, bash and fish.</p>
+        </div>
+      </details>
+      <details class="faq-item">
         <summary>Can I export reports for a ticket or a vendor review?</summary>
         <div class="faq-answer">
           <p>Yes, every audit exports as JSON, HTML, or PDF. The HTML and PDF exports are designed to read like an IT vendor-review one-pager; the JSON keeps every detector's raw output for downstream tooling.</p>
@@ -1477,7 +1528,7 @@
       <article class="install-card featured reveal" aria-labelledby="install-brew">
         <div class="platform">Recommended</div>
         <h3 id="install-brew">Homebrew tap</h3>
-        <p>The way most teams already install Mac software. <code>brew upgrade --cask privacycommand</code> keeps it current; privacycommand notices it's running from a Homebrew Caskroom and disables in-app updates so brew stays in charge.</p>
+        <p>The way most teams already install Mac software. <code>brew upgrade --cask privacycommand</code> keeps it current; privacycommand notices it's running from a Homebrew Caskroom and disables in-app updates so brew stays in charge. The cask also puts the <code>privacycommand</code> command on your <code>PATH</code>, with tab completion.</p>
         <div class="terminal" role="img" aria-label="brew install privacykey/tap/privacycommand">
           <div><span class="pr">$</span> <span class="cm">brew install</span> <span class="ar">privacykey/tap/privacycommand</span></div>
         </div>
@@ -1488,7 +1539,7 @@
       <article class="install-card reveal delay-1" aria-labelledby="install-dmg">
         <div class="platform">Direct download</div>
         <h3 id="install-dmg">Signed DMG</h3>
-        <p>The signed and notarized <code>.dmg</code> from the latest GitHub release. Drag the app into <code>/Applications</code>, you're done. In-app updates ship via Sparkle 2. Auto-checks are <em>off by default</em>, and you opt in via Settings → Updates.</p>
+        <p>The signed and notarized <code>.dmg</code> from the latest GitHub release. Drag the app into <code>/Applications</code>, you're done. In-app updates ship via Sparkle 2. Auto-checks are <em>off by default</em>, and you opt in via Settings → Updates. For the command-line tool, use <strong>Install Command Line Tool…</strong> in the privacycommand menu.</p>
         <a href="https://github.com/privacykey/privacycommand/releases/latest" class="btn btn-primary btn-lg" rel="noopener">
           Download .dmg
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -1501,13 +1552,13 @@
       <article class="install-card reveal delay-2" aria-labelledby="install-source">
         <div class="platform">For tinkerers</div>
         <h3 id="install-source">Build from source</h3>
-        <p>Open the Xcode project or build the SPM target directly. The pure-Swift analyzer is AppKit-free, so you can drive it from the CLI (<code>auditctl</code>) or wrap it in your own tooling.</p>
+        <p>Open the Xcode project or build the SPM target directly. The pure-Swift analyzer is AppKit-free, so you can drive it from the <code>privacycommand</code> CLI or wrap it in your own tooling.</p>
         <div class="terminal" role="img" aria-label="git clone privacykey privacycommand, then swift build">
           <div><span class="pr">$</span> <span class="cm">git clone</span> <span class="ar">github.com/privacykey/privacycommand</span></div>
           <div><span class="pr">$</span> <span class="cm">cd</span> <span class="ar">privacycommand/privacycommand</span></div>
           <div><span class="pr">$</span> <span class="cm">swift build</span></div>
         </div>
-        <a href="https://github.com/privacykey/privacycommand#build-from-source" class="btn btn-ghost" rel="noopener">Build guide</a>
+        <a href="https://github.com/privacykey/privacycommand/blob/main/CONTRIBUTING.md" class="btn btn-ghost" rel="noopener">Build guide</a>
         <div class="footer-meta">Swift 5.9 · Xcode or SPM</div>
       </article>
     </div>
@@ -1531,6 +1582,7 @@
         <h5>Product</h5>
         <ul>
           <li><a href="#features">Features</a></li>
+          <li><a href="#cli">Command line</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#install">Install</a></li>
         </ul>
